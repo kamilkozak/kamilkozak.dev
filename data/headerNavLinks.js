@@ -5,15 +5,15 @@ const headerNavLinks = [
   },
   {
     href: '/tags',
-    title: 'Tags',
+    title: 'Tagi',
   },
-  {
-    href: '/projects',
-    title: 'Projects',
-  },
+  // {
+  //   href: '/projects',
+  //   title: 'Projects',
+  // },
   {
     href: '/about',
-    title: 'About',
+    title: 'O mnie',
   },
 ]
 export default headerNavLinks

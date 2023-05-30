@@ -1,9 +1,10 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
+import Image from "@/components/Image";
+import logo from "@/data/logo.jpg";
 const Header = () => {
   return (
     <header className="flex items-center justify-between py-10">
@@ -11,14 +12,20 @@ const Header = () => {
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between">
             <div className="mr-3">
-              <Logo />
+              <Image
+                src={logo}
+                width={64}
+                height={64}
+                alt="avatar"
+                className="h-16 w-16 rounded-full"
+              />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
               <div className="hidden h-6 text-2xl font-semibold sm:block">
-                {siteMetadata.headerTitle}
+                {null}
               </div>
             ) : (
-              siteMetadata.headerTitle
+              null
             )}
           </div>
         </Link>

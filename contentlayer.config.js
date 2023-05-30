@@ -122,6 +122,9 @@ export const Authors = defineDocumentType(() => ({
     github: {
       type: 'string',
     },
+    instagram: {
+      type: 'string',
+    },
     layout: {
       type: 'string',
     },
