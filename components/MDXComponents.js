@@ -2,7 +2,7 @@
 import React from 'react'
 import { TOCInline } from 'pliny/ui/TOCInline'
 import { Pre } from 'pliny/ui/Pre'
-import { BlogNewsletterForm } from 'pliny/ui/NewsletterForm'
+import { BlogNewsletterForm } from '@/components/NewsletterForm'
 import Image from './Image'
 import CustomLink from './Link'
 export const Wrapper = ({ layout, content, ...rest }) => {

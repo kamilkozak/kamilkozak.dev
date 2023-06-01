@@ -4,7 +4,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import { sortedBlogPost, allCoreContent } from 'pliny/utils/contentlayer'
-import { NewsletterForm } from 'pliny/ui/NewsletterForm'
+import NewsletterForm from '@/components/NewsletterForm'
 import { allBlogs } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import clsx from 'clsx'
@@ -21,7 +21,7 @@ import logoPlaceholder from 'public/static/images/logos/placeholder.png'
 import SectionContainer from '@/components/SectionContainer'
 import { Button } from '@/components/Button'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 3
 export const getStaticProps = async () => {
   const sortedPosts = sortedBlogPost(allBlogs)
   const posts = allCoreContent(sortedPosts)
@@ -266,12 +266,24 @@ export default function Home({ posts }) {
                     aria-hidden="true"
                     className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
                   >
-                    Read article
+                    Czytaj dalej
                     <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
                   </div>
                 </article>
               )
             })}
+            {posts.length > MAX_DISPLAY && (
+              <div className="flex justify-end text-base font-medium leading-6">
+                <Link
+                  href="/blog"
+                  className="flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  aria-label="Wszystkie posty"
+                >
+                  Wszystkie posty
+                  <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
+                </Link>
+              </div>
+            )}
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             {siteMetadata.newsletter.provider && (
@@ -282,18 +294,6 @@ export default function Home({ posts }) {
             <Resume />
           </div>
         </div>
-
-        {posts.length > MAX_DISPLAY && (
-          <div className="flex justify-end text-base font-medium leading-6">
-            <Link
-              href="/blog"
-              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-              aria-label="All posts"
-            >
-              All Posts &rarr;
-            </Link>
-          </div>
-        )}
       </SectionContainer>
     </>
   )
