@@ -1,10 +1,11 @@
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
 import { PageSEO } from '@/components/SEO'
+import SectionContainer from '@/components/SectionContainer'
 export default function AuthorLayout({ children, content }) {
   const { name, avatar, occupation, company, email, twitter, linkedin, github, instagram } = content
   return (
-    <>
+    <SectionContainer>
       <PageSEO title={`About - ${name}`} description={`About me - ${name}`} />
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
@@ -35,6 +36,6 @@ export default function AuthorLayout({ children, content }) {
           <div className="prose max-w-none pb-8 pt-8 dark:prose-dark xl:col-span-2">{children}</div>
         </div>
       </div>
-    </>
+    </SectionContainer>
   )
 }
