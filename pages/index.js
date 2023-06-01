@@ -6,6 +6,16 @@ import { formatDate } from 'pliny/utils/formatDate'
 import { sortedBlogPost, allCoreContent } from 'pliny/utils/contentlayer'
 import { NewsletterForm } from 'pliny/ui/NewsletterForm'
 import { allBlogs } from 'contentlayer/generated'
+import SocialIcon from '@/components/social-icons'
+import clsx from 'clsx'
+import Image from '@/components/Image'
+import image1 from 'public/static/images/photos/image-1.jpg'
+import image2 from 'public/static/images/photos/image-2.jpg'
+import image3 from 'public/static/images/photos/image-3.jpg'
+import image4 from 'public/static/images/photos/image-4.jpg'
+import image5 from 'public/static/images/photos/image-5.jpg'
+import SectionContainer from '@/components/SectionContainer'
+
 const MAX_DISPLAY = 5
 export const getStaticProps = async () => {
   const sortedPosts = sortedBlogPost(allBlogs)
@@ -16,19 +26,60 @@ export const getStaticProps = async () => {
     },
   }
 }
+
+function Photos() {
+  let rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2']
+
+  return (
+    <div className="mt-16 sm:mt-20">
+      <div className="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
+        {[image1, image2, image3, image4, image5].map((image, imageIndex) => (
+          <div
+            key={image.src}
+            className={clsx(
+              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
+              rotations[imageIndex % rotations.length]
+            )}
+          >
+            <Image
+              src={image}
+              alt=""
+              sizes="(min-width: 640px) 18rem, 11rem"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Home({ posts }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            Latest
-          </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
-          </p>
+      <SectionContainer>
+        <div className="max-w-2xl">
+          <div className="space-y-3 md:space-y-6">
+            <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
+              Programista PHP z pragmatycznym podejściem.
+            </h1>
+            <p className="leading-7 text-gray-600 dark:text-gray-400">{siteMetadata.description}</p>
+            <div className="mt-6 flex gap-7">
+              <SocialIcon kind="twitter" href={siteMetadata.twitter} size={5} />
+              <SocialIcon kind="instagram" href={siteMetadata.instagram} size={5} />
+              <SocialIcon kind="github" href={siteMetadata.github} size={5} />
+              <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={5} />
+              <SocialIcon kind="facebook" href={siteMetadata.facebook} size={5} />
+              <SocialIcon kind="youtube" href={siteMetadata.youtube} size={5} />
+            </div>
+          </div>
         </div>
+      </SectionContainer>
+
+      <Photos />
+
+      <SectionContainer>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post) => {
@@ -80,7 +131,8 @@ export default function Home({ posts }) {
             )
           })}
         </ul>
-      </div>
+      </SectionContainer>
+
       {posts.length > MAX_DISPLAY && (
         <div className="flex justify-end text-base font-medium leading-6">
           <Link

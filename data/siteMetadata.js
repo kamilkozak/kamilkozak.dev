@@ -5,7 +5,8 @@ const siteMetadata = {
   title: 'Kamil Kozak - Programista PHP z pragmatycznym podejściem.',
   author: 'Kamil Kozak',
   headerTitle: 'Kamil Kozak',
-  description: 'Jestem Kamil, Software Developer z ponad 10-letnim doświadczeniem w pracy z technologiami backendowymi i frontendowymi takimi jak PHP, Laravel i Javascript.',
+  description:
+    'Jestem Kamil, Software Developer/Architect z ponad 10-letnim doświadczeniem w pracy z technologiami backendowymi i frontendowymi takimi jak PHP, Laravel i Javascript.',
   language: 'pl-PL',
   theme: 'system', // system, dark or light
   siteUrl: 'https://kamilkozak.dev',
