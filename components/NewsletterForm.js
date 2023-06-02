@@ -68,10 +68,10 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
       onSubmit={subscribe}
       className="rounded-2xl border border-gray-100 p-6 dark:border-gray-700/40"
     >
-      <h2 className="flex text-sm font-semibold text-gray-900 dark:text-gray-100">
+      <div className="flex text-sm font-semibold text-gray-900 dark:text-gray-100">
         <MailIcon className="h-6 w-6 flex-none" />
         <span className="ml-3">{title}</span>
-      </h2>
+      </div>
       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
         Otrzymuj powiadomienia, gdy opublikuję coś nowego i anuluj subskrypcję w dowolnym momencie.
       </p>
@@ -105,7 +105,7 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
 export default NewsletterForm
 
 export const BlogNewsletterForm = ({ title }) => (
-  <div className="flex items-center justify-center">
+  <div className="not-prose flex items-center justify-center">
     <div className="max-w-2xl">
       <NewsletterForm title={title} />
     </div>
