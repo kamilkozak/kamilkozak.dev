@@ -45,11 +45,11 @@ function BriefcaseIcon(props) {
     >
       <path
         d="M2.75 9.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z"
-        className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
+        className="fill-gray-100 stroke-gray-400 dark:fill-gray-100/10 dark:stroke-gray-500"
       />
       <path
         d="M3 14.25h6.249c.484 0 .952-.002 1.316.319l.777.682a.996.996 0 0 0 1.316 0l.777-.682c.364-.32.832-.319 1.316-.319H21M8.75 6.5V4.75a2 2 0 0 1 2-2h2.5a2 2 0 0 1 2 2V6.5"
-        className="stroke-zinc-400 dark:stroke-zinc-500"
+        className="stroke-gray-400 dark:stroke-gray-500"
       />
     </svg>
   )
@@ -127,27 +127,27 @@ function Resume() {
   ]
 
   return (
-    <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+    <div className="rounded-2xl border border-gray-100 p-6 dark:border-gray-700/40">
+      <h2 className="flex text-sm font-semibold text-gray-900 dark:text-gray-100">
         <BriefcaseIcon className="h-6 w-6 flex-none" />
         <span className="ml-3">Doświadczenie</span>
       </h2>
       <ol className="mt-6 space-y-4">
         {resume.map((role, roleIndex) => (
           <li key={roleIndex} className="flex gap-4">
-            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-gray-800/5 ring-1 ring-gray-900/5 dark:border dark:border-gray-700/50 dark:bg-gray-800 dark:ring-0">
               <Image src={role.logo} alt="" className="h-7 w-7" unoptimized />
             </div>
             <dl className="flex flex-auto flex-wrap gap-x-2">
               <dt className="sr-only">Firma</dt>
-              <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              <dd className="w-full flex-none text-sm font-medium text-gray-900 dark:text-gray-100">
                 {role.company}
               </dd>
               <dt className="sr-only">Stanowisko</dt>
-              <dd className="text-xs text-zinc-500 dark:text-zinc-400">{role.title}</dd>
+              <dd className="text-xs text-gray-500 dark:text-gray-400">{role.title}</dd>
               <dt className="sr-only">Data</dt>
               <dd
-                className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+                className="ml-auto text-xs text-gray-400 dark:text-gray-500"
                 aria-label={`${role.start.label ?? role.start} until ${role.end.label ?? role.end}`}
               >
                 <time dateTime={role.start.dateTime ?? role.start}>
@@ -169,7 +169,7 @@ function Resume() {
         rel="noopener noreferrer"
       >
         Pobierz CV
-        <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
+        <ArrowDownIcon className="h-4 w-4 stroke-gray-400 transition group-active:stroke-gray-600 dark:group-hover:stroke-gray-50 dark:group-active:stroke-gray-50" />
       </Button>
     </div>
   )
@@ -185,7 +185,7 @@ function Photos() {
           <div
             key={image.src}
             className={clsx(
-              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 sm:w-72 sm:rounded-2xl',
+              'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 sm:w-72 sm:rounded-2xl',
               rotations[imageIndex % rotations.length]
             )}
           >
@@ -235,8 +235,8 @@ export default function Home({ posts }) {
               const { slug, date, title, summary, tags } = post
               return (
                 <article key={slug} className="group relative flex flex-col items-start">
-                  <h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-                    <div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
+                  <h2 className="text-base font-semibold tracking-tight text-gray-800 dark:text-gray-100">
+                    <div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-gray-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-gray-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
                     <Link href={`/blog/${slug}`}>
                       <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
                       <span className="relative z-10">{title}</span>
@@ -248,23 +248,23 @@ export default function Home({ posts }) {
                     ))}
                   </div>
                   <time
-                    className="relative z-10 order-first mb-3 flex items-center pl-3.5 text-sm text-zinc-400 dark:text-zinc-500"
+                    className="relative z-10 order-first mb-3 flex items-center pl-3.5 text-sm text-gray-400 dark:text-gray-500"
                     dateTime={date}
                   >
                     <span
                       className="absolute inset-y-0 left-0 flex items-center"
                       aria-hidden="true"
                     >
-                      <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
+                      <span className="h-4 w-0.5 rounded-full bg-gray-200 dark:bg-gray-500"></span>
                     </span>
                     {formatDate(date, siteMetadata.locale)}
                   </time>
-                  <p className="relative z-10 mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  <p className="relative z-10 mt-2 text-sm text-gray-600 dark:text-gray-400">
                     {summary}
                   </p>
                   <div
                     aria-hidden="true"
-                    className="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+                    className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary-500"
                   >
                     Czytaj dalej
                     <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />

@@ -16,11 +16,11 @@ function MailIcon(props) {
     >
       <path
         d="M2.75 7.75a3 3 0 0 1 3-3h12.5a3 3 0 0 1 3 3v8.5a3 3 0 0 1-3 3H5.75a3 3 0 0 1-3-3v-8.5Z"
-        className="fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500"
+        className="fill-gray-100 stroke-gray-400 dark:fill-gray-100/10 dark:stroke-gray-500"
       />
       <path
         d="m4 6 6.024 5.479a2.915 2.915 0 0 0 3.952 0L20 6"
-        className="stroke-zinc-400 dark:stroke-zinc-500"
+        className="stroke-gray-400 dark:stroke-gray-500"
       />
     </svg>
   )
@@ -66,19 +66,19 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
   return (
     <form
       onSubmit={subscribe}
-      className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40"
+      className="rounded-2xl border border-gray-100 p-6 dark:border-gray-700/40"
     >
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+      <h2 className="flex text-sm font-semibold text-gray-900 dark:text-gray-100">
         <MailIcon className="h-6 w-6 flex-none" />
         <span className="ml-3">{title}</span>
       </h2>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+      <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
         Otrzymuj powiadomienia, gdy opublikuję coś nowego i anuluj subskrypcję w dowolnym momencie.
       </p>
       <div className="mt-6 flex">
         <input
           autoComplete="email"
-          className="min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10 sm:text-sm"
+          className="min-w-0 flex-auto appearance-none rounded-md border border-gray-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-gray-800/5 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/10 dark:border-gray-700 dark:bg-gray-700/[0.15] dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/10 sm:text-sm"
           id="email-input"
           name="email"
           placeholder={subscribed ? 'Subskrybujesz newsletter !  🎉' : 'Adres Email'}
@@ -91,9 +91,7 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
         <Button
           disabled={subscribed}
           type="submit"
-          className={`ml-4 flex-none ${
-            subscribed && 'cursor-default hover:bg-gray-800 dark:hover:bg-gray-700'
-          }`}
+          className={`ml-4 flex-none ${subscribed && 'cursor-default'}`}
         >
           {subscribed ? 'Dzięki!' : 'Dołącz'}
         </Button>
@@ -108,6 +106,8 @@ export default NewsletterForm
 
 export const BlogNewsletterForm = ({ title }) => (
   <div className="flex items-center justify-center">
-    <NewsletterForm title={title} />
+    <div className="max-w-2xl">
+      <NewsletterForm title={title} />
+    </div>
   </div>
 )
