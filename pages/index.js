@@ -164,7 +164,7 @@ function Resume() {
         href="/static/software_developer_kamil_kozak.pdf"
         variant="secondary"
         className="group mt-6 w-full"
-        alt="alt text"
+        alt="Kamil Kozak - CV"
         target="_blank"
         rel="noopener noreferrer"
       >

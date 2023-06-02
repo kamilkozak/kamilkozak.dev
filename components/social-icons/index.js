@@ -5,6 +5,7 @@ import Youtube from './youtube.svg'
 import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
 import Instagram from './instagram.svg'
+import clsx from 'clsx'
 
 // Icons taken from: https://simpleicons.org/
 
@@ -18,7 +19,7 @@ const components = {
   instagram: Instagram,
 }
 
-const SocialIcon = ({ kind, href, size = 8 }) => {
+const SocialIcon = ({ className, children, kind, href, size = 8 }) => {
   if (!href || (kind === 'mail' && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href)))
     return null
 
@@ -26,15 +27,19 @@ const SocialIcon = ({ kind, href, size = 8 }) => {
 
   return (
     <a
-      className="text-sm text-gray-500 transition hover:text-gray-600"
+      className={clsx(
+        'group flex text-sm font-medium text-gray-800 transition hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-500',
+        className
+      )}
       target="_blank"
       rel="noopener noreferrer"
       href={href}
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`fill-current text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 h-${size} w-${size}`}
+        className={`flex-none fill-gray-500 transition group-hover:fill-primary-500 h-${size} w-${size}`}
       />
+      {children && <span className="ml-4">{children}</span>}
     </a>
   )
 }
