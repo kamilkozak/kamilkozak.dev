@@ -33,7 +33,7 @@ const SocialIcon = ({ kind, href, size = 8 }) => {
     >
       <span className="sr-only">{kind}</span>
       <SocialSvg
-        className={`fill-current text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 h-${size} w-${size}`}
+        className={`fill-current text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 h-${size} w-${size}`}
       />
     </a>
   )
