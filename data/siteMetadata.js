@@ -13,7 +13,7 @@ const siteMetadata = {
   siteRepo: 'https://github.com/kamilkozak/kamilkozak.dev',
   siteLogo: '/static/images/logo.jpg',
   image: '/static/images/avatar.jpg',
-  socialBanner: '/static/images/avatar.jpg',
+  socialBanner: '/static/images/twitter-card.jpg',
   email: 'kozak.kamilw@gmail.com',
   github: 'https://github.com/kamilkozak',
   twitter: 'https://twitter.com/kamil_kozak7',

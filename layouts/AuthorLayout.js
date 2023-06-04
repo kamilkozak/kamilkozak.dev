@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function AuthorLayout({ content }) {
   const { name, avatar, email, twitter, linkedin, github, instagram } = content
   return (
-    <SectionContainer className="mt-8 sm:mt-16">
+    <SectionContainer className="mt-4 sm:mt-8">
       <PageSEO
         title={`O mnie - ${name}`}
         description="Nazywam się Kamil Kozak. Rozwiązuje problemy biznesowe za pomocą Laravela."

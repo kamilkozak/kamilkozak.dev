@@ -1,6 +1,5 @@
 import Link from '@/components/Link'
 import { PageSEO } from '@/components/SEO'
-import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import { sortedBlogPost, allCoreContent } from 'pliny/utils/contentlayer'
@@ -60,19 +59,6 @@ function ArrowDownIcon(props) {
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
       <path
         d="M4.75 8.75 8 12.25m0 0 3.25-3.5M8 12.25v-8.5"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function ChevronRightIcon(props) {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
-      <path
-        d="M6.75 5.75 9.25 8l-2.5 2.25"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -209,7 +195,7 @@ export default function Home({ posts }) {
       <SectionContainer>
         <div className="max-w-2xl">
           <div className="space-y-3 md:space-y-6">
-            <h1 className="text-3xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
               Programista PHP z pragmatycznym podejściem.
             </h1>
             <p className="leading-7 text-gray-600 dark:text-gray-400">{siteMetadata.description}</p>
@@ -242,11 +228,6 @@ export default function Home({ posts }) {
                       <span className="relative z-10">{title}</span>
                     </Link>
                   </h2>
-                  <div className="z-10 flex flex-wrap">
-                    {tags.map((tag) => (
-                      <Tag key={tag} text={tag} />
-                    ))}
-                  </div>
                   <time
                     className="relative z-10 order-first mb-3 flex items-center pl-3.5 text-sm text-gray-400 dark:text-gray-500"
                     dateTime={date}
@@ -266,8 +247,7 @@ export default function Home({ posts }) {
                     aria-hidden="true"
                     className="relative z-10 mt-4 flex items-center text-sm font-medium text-primary-500"
                   >
-                    Czytaj dalej
-                    <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
+                    Czytaj dalej &rarr;
                   </div>
                 </article>
               )
@@ -276,11 +256,10 @@ export default function Home({ posts }) {
               <div className="flex justify-end text-base font-medium leading-6">
                 <Link
                   href="/blog"
-                  className="flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                  className="flex items-center text-sm text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                   aria-label="Wszystkie posty"
                 >
-                  Wszystkie posty
-                  <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
+                  Wszystkie posty &rarr;
                 </Link>
               </div>
             )}

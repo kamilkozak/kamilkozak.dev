@@ -22,12 +22,15 @@ export const getStaticProps = async () => {
 export default function BlogPage({ posts, initialDisplayPosts, pagination }) {
   return (
     <>
-      <PageSEO title={`Blog - ${siteMetadata.author}`} description={siteMetadata.description} />
+      <PageSEO
+        title={`Blog - ${siteMetadata.author}`}
+        description="Moje przemyślenia na temat programowania, architektury, PHP i Laravela."
+      />
       <ListLayout
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="All Posts"
+        title="Moje przemyślenia na temat programowania, architektury, PHP i Laravela."
       />
     </>
   )
