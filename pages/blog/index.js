@@ -30,7 +30,7 @@ export default function BlogPage({ posts, initialDisplayPosts, pagination }) {
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title="Moje przemyślenia na temat programowania, architektury, PHP i Laravela."
+        title="Blog for Laravel Artisans"
       />
     </>
   )
