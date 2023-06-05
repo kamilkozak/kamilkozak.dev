@@ -92,7 +92,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
       <div className="mt-16 sm:mt-20">
         <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
           <div className="flex flex-col space-y-16">
-            {!filteredBlogPosts.length && 'No posts found.'}
+            {!filteredBlogPosts.length && 'Nie znaleziono postów.'}
             {displayPosts.map((post) => {
               const { path, date, title, summary, tags } = post
               return (

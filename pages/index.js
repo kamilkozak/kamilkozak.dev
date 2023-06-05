@@ -216,7 +216,7 @@ export default function Home({ posts }) {
       <SectionContainer className="mt-24 md:mt-28">
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
           <div className="flex flex-col gap-16">
-            {!posts.length && 'No posts found.'}
+            {!posts.length && 'Nie znaleziono postów.'}
             {posts.slice(0, MAX_DISPLAY).map((post) => {
               const { slug, date, title, summary, tags } = post
               return (

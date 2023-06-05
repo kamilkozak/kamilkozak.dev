@@ -4,13 +4,27 @@ import 'katex/dist/katex.css'
 // import '@/css/docsearch.css' // Uncomment if using algolia docsearch
 // import '@docsearch/css' // Uncomment if using algolia docsearch
 
+import { useEffect, useRef } from 'react'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import siteMetadata from '@/data/siteMetadata'
 import { Analytics } from 'pliny/analytics'
 import { SearchProvider } from 'pliny/search'
 import LayoutWrapper from '@/components/LayoutWrapper'
-export default function App({ Component, pageProps }) {
+
+function usePrevious(value) {
+  let ref = useRef()
+
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
+}
+
+export default function App({ Component, pageProps, router }) {
+  let previousPathname = usePrevious(router.pathname)
+
   return (
     <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
       <Head>
@@ -24,7 +38,7 @@ export default function App({ Component, pageProps }) {
       </div>
       <LayoutWrapper>
         <SearchProvider searchConfig={siteMetadata.search}>
-          <Component {...pageProps} />
+          <Component previousPathname={previousPathname} {...pageProps} />
         </SearchProvider>
       </LayoutWrapper>
     </ThemeProvider>

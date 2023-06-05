@@ -37,7 +37,7 @@ export const getStaticProps = async ({ params }) => {
     },
   }
 }
-export default function BlogPostPage({ post, authorDetails, prev, next }) {
+export default function BlogPostPage({ post, authorDetails, prev, next, previousPathname }) {
   return (
     <>
       {'draft' in post && post.draft === true ? (
@@ -58,6 +58,7 @@ export default function BlogPostPage({ post, authorDetails, prev, next }) {
           authorDetails={authorDetails}
           prev={prev}
           next={next}
+          previousPathname={previousPathname}
         />
       )}
     </>
