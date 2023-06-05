@@ -20,7 +20,7 @@ function NavItem({ href, children }) {
           'relative block px-3 py-2 transition',
           isActive
             ? 'text-primary-500 dark:text-primary-400'
-            : 'hover:text-primary-500 dark:hover:text-primary-400'
+            : 'hover:text-primary-600 dark:hover:text-primary-400'
         )}
       >
         {children}

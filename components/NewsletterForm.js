@@ -75,7 +75,7 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
         Otrzymuj powiadomienia, gdy opublikuję coś nowego i anuluj subskrypcję w dowolnym momencie.
       </p>
-      <div className="mt-6 flex">
+      <div className="mx-auto mt-6 flex max-w-2xl">
         <input
           autoComplete="email"
           className="min-w-0 flex-auto appearance-none rounded-md border border-gray-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-gray-800/5 placeholder:text-gray-400 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/10 dark:border-gray-700 dark:bg-gray-700/[0.15] dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus:border-primary-400 dark:focus:ring-primary-400/10 sm:text-sm"
@@ -105,9 +105,7 @@ const NewsletterForm = ({ title = 'Bądź na bieżąco' }) => {
 export default NewsletterForm
 
 export const BlogNewsletterForm = ({ title }) => (
-  <div className="not-prose flex items-center justify-center">
-    <div className="max-w-2xl">
-      <NewsletterForm title={title} />
-    </div>
+  <div className="not-prose">
+    <NewsletterForm title={title} />
   </div>
 )

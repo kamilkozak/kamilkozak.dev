@@ -28,7 +28,7 @@ const SocialIcon = ({ className, children, kind, href, size = 8 }) => {
   return (
     <a
       className={clsx(
-        'group flex text-sm font-medium text-gray-800 transition hover:text-primary-500 dark:text-gray-200 dark:hover:text-primary-500',
+        'group flex text-sm font-medium text-gray-800 transition hover:text-primary-600 dark:text-gray-200 dark:hover:text-primary-400',
         className
       )}
       target="_blank"
