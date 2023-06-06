@@ -1,0 +1,141 @@
+---
+title: 'Czym jest Domain Driven Design (DDD)?'
+date: '2022-09-12'
+lastmod: '2023-01-29'
+tags: ['ddd', 'laravel', 'php', 'architecture']
+draft: false
+summary: 'Wpis ten powstał jako próba usystematyzowania mojej wiedzy po przeczytaniu książki "Domain-Driven Design: Tackling Complexity in the Heart of Software" Erica Evansa.'
+images: ['/static/blog/czym-jest-domain-driven-desing/ddd-strategiczne.jpg']
+---
+
+
+Wpis ten powstał jako próba usystematyzowania mojej wiedzy po przeczytaniu książki "Domain-Driven Design: Tackling Complexity in the Heart of Software" Erica Evansa.
+
+Oprogramowanie jest najczęściej tworzone po to, aby rozwiązywać problemy biznesowe pochodzące z domeny świata rzeczywistego. W podejściu Domain Driven Design musisz od samego początku zrozumieć, że oprogramowanie wywodzi się z tej domeny i jest z nią głęboko powiązane. Mimo, że składa się z kodu nie należy go postrzegać tylko jako obiekty i metody.
+
+> W książkach przełożonych na język polski pojęcie "Domain Driven Design" tłumaczone jest jako "Projektowanie Sterowane Domeną", "Projektowanie oparte na dziedzinie", "Projektowanie Dziedzinowe".
+
+Aby stworzyć dobre oprogramowanie, musisz wiedzieć, o co w nim chodzi. Nie możesz stworzyć systemu oprogramowania bankowego, jeśli nie masz dobrego zrozumienia, o co chodzi w bankowości, musisz przedtem zrozumieć tę domenę.
+
+Jak sprawić, by oprogramowanie harmonijnie pasowało do domeny? Najlepszym sposobem na to jest uczynienie oprogramowania odzwierciedleniem domeny. Musi ono zawierać podstawowe koncepcje i elementy domeny oraz precyzyjnie realizować relacje między nimi. Oprogramowanie musi modelować domenę.
+
+> Domena. Sfera wiedzy, wpływu lub działalności. Obszar tematyczny, do którego użytkownik stosuje program to domena oprogramowania.
+
+Więc zaczynamy od domeny. Domena jest czymś ze świata rzeczywistego, aby stała się kodem musimy stworzyć abstrakcję domeny. Wiele dowiadujemy się o domenie podczas rozmów z ekspertami domenowymi. Ale ta surowa wiedza nie da się łatwo przekształcić w konstrukcje oprogramowania, chyba, że zbudujemy jej abstrakcję. Na początku będzie niekompletna, ale z czasem będziemy ją ulepszać. Czym jest ta abstrakcja? To model domenowy.
+
+> Model. Zestaw abstrakcji który, opisuje wybrany aspekt domeny i który, może być użyty do rozwiązania problemu dotyczącego tej domeny.
+
+Wg Erica Evansa model domeny nie jest konkretnym diagramem. Jest to idea, którą ma przekazać diagram. Model jest istotną częścią projektowania oprogramowania. Potrzebujemy go, aby poradzić sobie z jego złożonością. Kiedy zostanie wyrażony, możemy zacząć projektować kod stosując różne podejścia takie jak Waterfall, Agile, Extreme Programming.
+
+## Język wszechobecny
+
+Eksperci domenowi i programiści powinni wymieniać się wiedzą wykopując pojęcia z domeny. Może to być proces chaotyczny, niemniej jednak niezbędny do zrozumienia dziedziny. Takie podejście zwykle ma pewne początkowe trudności ze względu na barierę komunikacyjną. Programiści myślą w kategoriach klas, metod, polimorfizmu, OOP, ale eksperci domenowi prawdopodobnie nic o tym nie wiedzą. Znają się za to na swojej specjalizacji. Projekt napotyka problemy, gdy członkowie zespołu nie mają wspólnego języka do omawiania domeny.
+
+Podstawową zasadą DDD jest użycie języka opartego na modelu. Poproś zespół, aby konsekwentnie używał tego języka w kodzie oraz wszystkich formach komunikacji. Z tego powodu język ten nazywany jest Językiem Wszechobecnym (Ubiquitous Language). Eksperci dziedzinowi powinni sprzeciwiać się terminom których sami nie rozumieją ponieważ oznacza to, że coś jest nie tak.
+
+Czego można używać do języka? Mowy, diagramów lub pisma. Zalecanym sposobem komunikowania modelu jest wykonanie kilku małych diagramów zawierających podzbiory modelu czyli klasy i relacje między nimi. Dokumenty te mogą być nawet rysowane ręcznie, ponieważ są tymczasowe i mogą zostać zmienione w niedalekiej przyszłości zanim model osiągnie bardziej stabilny status. Uważaj na długie dokumenty. Ich napisanie zajmuje dużo czasu i mogą stać się przestarzałe, zanim zostaną ukończone. Możliwa jest również komunikacja za pomocą kodu.
+
+Język Wszechobecny obowiązuje w obrębie jednego Kontekstu Ograniczonego gdyż pojęcia mogą mieć różne znaczenia. "Lot" w  zależności od kontekstu może oznaczać start i lądowanie inne definicje odnoszą się do konserwacji samolotu lub biletowania przelotów. Ponieważ każda z tych definicji „lotu” jest jasna wyłącznie we własnym kontekście, to każda powinna zostać ujęta w osobnym Kontekście Ograniczonym. Ujęcie ich wszystkich w jednym wspólnym Kontekście Ograniczonym doprowadziłoby do pomieszania pojęć.
+
+> Język Wszechobecny. Język wypracowany wokół modelu domeny i używany przez wszyskich członków zespołu w obrębie Kontekstu Ograniczonego do komunikacji przy pracy nad oprogramowaniem.
+
+## Kontekst ograniczony
+
+Każdy model ma kontekst. Kiedy tworzymy aplikację, która ma współdziałać z inną starszą aplikacją, jasne jest, że nowa aplikacja ma własny model i kontekst. Nie mogą być łączone, mieszane ani mylone. Ale kiedy pracujemy nad dużą, aplikacją sami musimy zdefiniować kontekst dla każdego tworzonego modelu.
+
+Po połączeniu kodu opartego na różnych modelach oprogramowanie staje się błędne i trudne do zrozumienia. Dlatego postaraj się umieścić w modelu te elementy, które są ze sobą powiązane i tworzą naturalną koncepcję. Model powinien być na tyle mały, aby można go było przypisać do jednego zespołu. Trudno utrzymać czysty model, gdy obejmuje on cały projekt firmy, ale znacznie łatwiej, gdy ogranicza się do jednego obszaru.
+
+Kontekst Ograniczony (Bounded Context) nie jest modułem. Kontekst Ograniczony obejmuje moduł. Zapewnia ramę, w której model ewoluuje.
+
+Za posiadanie wielu modeli trzeba zapłacić pewną cenę. Musimy  określić granicę i relacje między różnymi modelami. Wymaga to dodatkowej pracy. Nie będziemy w stanie przenosić żadnych obiektów między różnymi modelami i nie możemy swobodnie wywoływać zachowania, tak jakby nie było granicy. Jednak korzyści są tego warte.
+
+Na przykład chcemy stworzyć aplikację e-commerce która posiada obsługę zamówień oraz magazynu. Stworzenie osobnego modelu dla każdej domeny spowoduje, że mogą swobodnie ewoluować, a nawet stać się oddzielnymi aplikacjami. Aplikacja magazynu może wysyłać obiekty DTO (Data Transfer Object) zawierające informacje o produkcie do zamówień. Dwa modele można rozwijać osobno i należy zadbać o to, aby działał interfejs między nimi.
+
+> Kontekst Ograniczony. Ustalony obszar zastosowania danego modelu. Kontekst pozwala członkom zespołu na jednoznaczne zrozumienie zakresu, obszaru, który ma pozostać spójny, i oddzielenie go od tego, co może zostać zaprojektowane w sposób niezależny.
+
+![Kontekst Ograniczony](/static/blog/czym-jest-domain-driven-desing/kontekst-ograniczony.jpg)
+
+### Continuous Integration
+
+Model nie jest w pełni zdefiniowany od początku. Powstaje, a następnie nieustanie ewoluuje w oparciu o informacje zwrotne z procesu rozwoju. Oznacza to, że do modelu mogą wchodzić nowe koncepcje, a do kodu dodawane są nowe elementy. Dlatego ciągła integracja jest procesem niezbędnym w Ograniczonym Kontekście. Musimy mieć procedurę używaną do scalania kodu. Im szybciej połączymy kod, tym lepiej.
+
+### Subdomeny
+
+Domena dzieli się na wiele Subdomen inaczej Poddziedzin (Subdomains) i każda z nich skupia się na mniejszych problemach. Np. E-commerce jako domena składa się z Subdomen: koszyk, płatności czy katalog produktów. W DDD Subdomena jest pojęciem relatywnym. Domena i Subdomena mogą być używane zamiennie. Kiedy używamy słowa Subdomena, podkreślamy, że domena o której mówimy, jest dzieckiem innej domeny wyższego poziomu.
+
+Subdomena która jest częścią świata rzeczywistego wdrażana jest jako Kontekst Ograniczony. Subdomena określa "co" produkt miałby osiągnąć i znajduje się w Przestrzeni Problemów (Problem Space). Kontekst Ograniczony określa "jak" produkt miałby to osiągnąć i leży w Przestrzeni Rozwiązań (Solution Space). W jednym Kontekście Ograniczonym powinniśmy  zawrzeć jedną Subdomenę. W niektórych przypadkach w jednym Kontekście Ograniczonym może się znaleźć wiele Subdomen, ale nie jest to najbardziej optymalna postać modelu.
+
+### Destylacja
+
+Duża domena ma duży model nawet po wielu refaktoryzacjach. W takich przypadkach może nadejść czas na Destylację. Ideą jest zdefiniowanie Domeny Głównej (Core Domain), która reprezentuję istotę modelu domeny i nie może zostać zaniedbana i nad którą powinni pracować najlepsi programiści. Produktami ubocznymi destylacji będą Subdomeny Generyczne (Generic) i Pomocnicze (Supporting), które będą obejmować inne części domeny.
+
+## Mapa kontekstów
+
+Duża aplikacja ma wiele modeli, a każdy ma swój kontekst ograniczony. Choć zespoły powinny pracować nad swoimi modelami, dobrze jest, aby każdy miał wyobrażenie o ogólnym obrazie. Mapa Kontekstów (Context Map) to dokument, który przedstawia Konteksty Ograniczone i relacje między nimi. Mapa kontekstów może być mało szczegółowym diagramem podobnym do tego poniżej.
+
+![Mapa kontekstów](/static/blog/czym-jest-domain-driven-desing/mapa-kontekstow.jpg)
+
+Ważne, aby wszyscy pracujący nad projektem go podzielali i rozumieli, aby uniknąć nakładania się kontekstów na siebie i problemów gdy system zostanie zintegrowany. Każdy Kontekst Ograniczony powinien mieć nazwę, która jest częścią Języka Wszechobecnego ponieważ pomaga to w komunikacji, gdy mówi się o całym systemie.
+
+### Istnieją różne sposoby interakcji między kontekstami:
+
+#### Partnerstwo (Partnership)
+Pomiędzy zespołami zachodzi relacja Partnerstwa. Każdy zespół odpowiada za jeden Kontekst Ograniczony. Wspólnie tworzą one Partnerstwo, w ramach którego posługują się zależnymi zestawami celów. Oznacza to, że obydwa zespoły wspólnie odnoszą sukces lub porażkę.
+
+#### Wspólne Jądro (Shared Kernel)
+Wspólne Jądro, część wspólna dwóch Kontekstów Ograniczonych, opisuje relację pomiędzy dwoma (lub więcej) zespołami, które współdzielą niewielki model. Zespoły muszą być zgodne co do tego, które elementy modelu mają być wspólne.
+
+#### Klient-Dostawca (Customer-Supplier)
+Model Klient-Dostawca opisuje taką relację pomiędzy dwoma Kontekstami Ograniczonymi i ich zespołami, w ramach której Dostawca znajduje się na wyższym szczeblu, Klient na niższym. Dostawca dominuje w tej relacji, ponieważ odpowiada za dostarczanie tego, czego Klient potrzebuje.
+
+#### Konformista (Conformist)
+Relacja Konformisty zachodzi, kiedy istnieją zespoły na wyższym i niższym szczeblu, a zespół wyższego szczebla nie ma żadnej motywacji do zaspokajania potrzeb tego drugiego. Zespół niższego szczebla z różnych względów nie może pozwolić sobie na tłumaczenie Języka Wszechobecnego zespołu wyższego szczebla, więc dostosowuje się on do jego modelu.
+
+#### Warstwa Zapobiegająca Uszkodzeniu (Anticorruption Layer)
+Warstwa Zapobiegająca Uszkodzeniu jest najbezpieczniejszą relacją, w ramach której zespół niższego szczebla tworzy warstwę translacyjną pomiędzy własnym Językiem Wszechobecnym a Językiem Wszechobecnym zespołu wyższego szczebla. Warstwa ta izoluje model niższego szczebla od jego odpowiednika na wyższym szczeblu i tłumaczy ich elementy.
+
+#### Usługa Otwartego Hosta (Open Host Service)
+Usługa Otwartego Hosta definiuje protokół lub interfejs, który daje dostęp do Kontekstu Ograniczonego w formie zestawu usług. Protokół jest „otwarty”, wobec czego wszyscy, którym zależy na integracji z Kontekstem Ograniczonym, mogą skorzystać z niego względnie bezproblemowo.
+
+#### Język Opublikowany (Published Language)
+Język Opublikowany, jest dobrze udokumentowanym językiem do wymiany informacji, umożliwiającym prosty przekaz i tłumaczenie pojęć.
+
+#### Oddzielne Drogi (Separate	Ways)
+Oddzielne Drogi opisują sytuację, w której integracja różnych Kontekstów Ograniczonych i stosowanie wielu Języków Wszechobecnych nie przynosi istotnych korzyści. Jeśli na przykład żaden z Języków Wszechobecnych nie może zapewnić oczekiwanej funkcjonalności, najlepiej stworzyć własne, specjalistyczne rozwiązanie w obrębie swojego Kontekstu Ograniczonego i pominąć integrację na potrzeby tego szczególnego przypadku.
+
+#### Wielka Kula Błota (Big Ball of Mud)
+Sytuacja, w której komunikacja przebiega w każdym kierunku. To jest miejsce w którym nie chcesz być.
+
+![DDD Strategiczne](/static/blog/czym-jest-domain-driven-desing/ddd-strategiczne.jpg)
+
+## Czym jest więc DDD w skrócie?
+
+Domain-Driven Design to podejście do wytwarzania oprogramowania, które charakteryzuje:
+
+1. Skupienie się na domenie.
+2. Odkrywanie modelu we współpracy ekspertów domenowych z programistami.
+3. Posługiwanie się językiem wszechobecnym w granicy kontekstu ograniczonego.
+
+Opisane pojęcia to część Strategiczna DDD czyli filozofia stojąca za Programowaniem Opartym Na Domenie. Projektowanie Strategiczne polega na tworzeniu wstępnego szkicu jeszcze przed przejściem do szczegółów implementacji czyli Projektowania Taktycznego. Skuteczne Projektowanie Taktyczne jest w praktyce niemożliwe, jeżeli nie wychodzi się od Projektu Strategicznego.
+
+## Elementy Składowe
+
+Elementy Składowe (Building Blocks) to wzorce, które należy stosować w Projektowaniu Opartym Na Modelu. Stanowią one część Taktyczną DDD.
+
+![DDD Taktyczne](/static/blog/czym-jest-domain-driven-desing/ddd-taktyczne.jpg)
+
+## Domain Driven Laravel
+
+### Active Record
+
+Można spotkać się z opinią, że Laravel nie nadaje się do Projektowania Sterowanego Domeną. Jak już wiesz zgodnie z DDD w centrum naszych zainteresowań musi być domena. Domena powinna być wyizolowana i "głupia" w stosunku do świata zewnętrznego. ORM Eloquent jest implementacją wzorca Active Record co oznacza, że że łączy dwa światy: domenę i logikę dostępu do baz danych. Active Record otacza wiersz w tabeli bazy danych, hermetyzuje dostęp do bazy danych i dodaje do tych danych logikę domeny. Tak więc AR jest reprezentacją rekordu bazy danych w skali 1:1. Jeżeli jednak nagniemy tę zasadę DDD Laravel pozwoli zrobić nam wiele fajnych rzeczy. W rzeczywistości Laravel i DDD nie wykluczają się całkowicie.
+
+### Co dalej?
+
+W kolejnych wpisach pokażę DDD Taktyczne w Laravelu trzymając się zasad:
+
+- Skup się na domenie. Bez tego tracimy istotę DDD.
+- Nie walcz z frameworkiem. Walka taka jest wyczerpująca i bezcelowa. Chcemy mieć dostęp do dobroci całego frameworka.
+
+W przeciętnej wielkości projekcie ten rodzaj architekty jako całość jest prawie zawsze przesadą. Nie uda się zastosować "czystego" podejścia DDD. Zamiast tego weźmiemy z niego najlepsze części i połączymy je w pragmatyczny sposób.
+
