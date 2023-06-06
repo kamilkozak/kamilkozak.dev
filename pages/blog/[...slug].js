@@ -3,7 +3,7 @@ import PageTitle from '@/components/PageTitle'
 import { MDXComponents } from '@/components/MDXComponents'
 import { sortedBlogPost, coreContent } from 'pliny/utils/contentlayer'
 import { allBlogs, allAuthors } from 'contentlayer/generated'
-const DEFAULT_LAYOUT = 'PostLayout'
+const DEFAULT_LAYOUT = 'PostClean'
 export async function getStaticPaths() {
   return {
     paths: allBlogs.map((p) => ({
