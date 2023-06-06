@@ -1,0 +1,279 @@
+---
+title: 'Architektura heksagonalna (Porty i Adaptery) w Laravelu'
+date: '2022-09-27'
+lastmod: '2022-12-04'
+tags: ['ddd', 'laravel', 'ports and adapters', 'hexagonal architecture']
+draft: false
+summary: "Punkt wyjścia do Architektury Heksagonalnej (Hexagonal Architecture) stanowi Architektura Warstwowa. Architektura ta dzieli systemy (aplikacje) na odrębne warstwy. Zgodnie z propozycją Erica Evansa z jego \"Blue Book'a\" zwykle będzie ich 3 lub 4."
+images: ['/static/blog/architektura-heksagonalna-porty-i-adaptery-w-laravelu/architektura-heksagonalna.jpg']
+---
+
+Punkt wyjścia do Architektury Heksagonalnej (Hexagonal Architecture) stanowi Architektura Warstwowa. Architektura ta dzieli systemy (aplikacje) na odrębne warstwy. Zgodnie z propozycją Erica Evansa z jego "Blue Book'a" zwykle będzie ich 3 lub 4.
+
+- **Warstwa Interfejsu Użytkownika**
+Przedstawia informacje użytkownikowi i interpretuje jego działania.
+
+- **Warstwa Aplikacji**
+Organizuje i deleguje obiekty domeny do wykonywania swojej pracy. Nie zawiera logiki związanej z domeną.
+
+- **Warstwa Domeny**
+Tu znajdują się koncepcje domeny biznesowej. Encje, które są kombinacją danych i zachowań.
+
+- **Warstwa infrastruktury**
+Przechowywanie oraz dostęp do danych. Framework i biblioteki pomocnicze.
+
+Jedną z najważniejszych korzyści stosowania Architektury Warstwowej jest rozdzielenie odpowiedzialności (separation of concerns). Pomaga ona odseparować domenę od pozostałych warstw i należy do wzorców taktycznych z Domain Driven Design. Problemem pozostają wycieki logiki między warstwami. Można łatwo skończyć z logiką biznesową w interfejsie użytkownika lub infrastrukturą w logice biznesowej.
+
+Rozwiązanie tego problemu przedstawił w 2005 roku Alistair Cockburn. Dla niego system składa się tylko z dwóch odrębnych części: wewnętrznej i zewnętrznej. Wnętrze to nasz rdzeń, a na zewnątrz to miejsce, w którym żyje interfejs użytkownika i infrastruktura.
+
+Cockburn doszedł do wniosku, że rdzeń współdziała z interfejsem użytkownika lub bazami danych lub testami automatycznymi w podobny sposób. Dlatego wszystkie te systemy zewnętrzne można oddzielić od rdzenia i komunikować się z nim w sposób niezależny od technologii za pośrednictwem **portów i adapterów**. Unikając w ten sposób sprzęgania i wycieku logiki między warstwą biznesową, a komponentami zewnętrznymi.
+
+> Architektura Heksagonalna jest też nazywana Architekturą Portów i Adapterów (Ports and Adapters). Bardzo podobne architektury dzielące system na warstwy to Clean Architecture - Roberta Martina oraz Onion Architecture - Jeffreya Palermo.
+
+![Heksagon](/static/blog/architektura-heksagonalna-porty-i-adaptery-w-laravelu/heksagon.jpg)
+
+## Porty
+
+Port jest bramą do rdzenia aplikacji. Określa on interfejs, który pozwoli zewnętrznym aktorom komunikować się z Rdzeniem, niezależnie od tego, kto lub co zaimplementuje ten interfejs. Porty umożliwiają również Rdzeniowi komunikację z zewnętrznymi systemami lub usługami, takimi jak bazy danych, systemy kolejek, inne aplikacje itp. Porty w kodzie będą reprezentowane jako interfejsy.
+
+## Adaptery
+
+Adapter zainicjuje interakcję z Rdzeniem przez Port przy użyciu określonej technologii, na przykład kontroler REST będzie reprezentował adapter, który umożliwia klientowi komunikowanie się z Rdzeniem. Może istnieć wiele adapterów dla każdego portu.
+
+## Rdzeń
+
+Alistair do określenia rdzenia używa słowa "Aplikacja". Rdzeń zawiera serwisy aplikacji, które orkiestrują funkcjonalności. Zawiera również model domenowy czyli logikę biznesową. Rdzeń jest reprezentowany przez heksagon (sześciokąt), który za pomocą Portów odbiera polecenia lub zapytania oraz również za pomocą Portów wysyła żądania do innych aktorów zewnętrznych, takich jak bazy danych.
+
+Alistair nie daje instrukcji, jak powinieneś ustrukturyzować kod w swoim rdzeniu, ale Architektura Heksagonalna jest często łączona z Domain Driven Design. Wtedy rdzeń lub sześciokąt zawiera warstwę aplikacji i warstwę domeny pozostawiając warstwy interfejsu użytkownika i infrastruktury na zewnątrz.
+
+![Architektura Heksagonalna](/static/blog/architektura-heksagonalna-porty-i-adaptery-w-laravelu/architektura-heksagonalna.jpg)
+
+## Dlaczego Heksagon?
+
+Alistair wybrał sześciokąt, aby ludzie wykonujący rysunek mieli miejsce na wstawianie portów i adapterów zgodnie z potrzebami, nie będąc ograniczonymi przez jednowymiarowy rysunek warstwowy. Termin Architektura Heksagonalna pochodzi od tego efektu wizualnego. Liczba 6 jest nieistotna - można użyć kształtu z n-krawędziami.
+
+## Strona sterująca i strona sterowana
+
+W systemie możemy rozróżnić 2 rodzaje aktorów ze względu na to kto inicjuje rozmowę lub jest za nią odpowiedzialny:
+
+- Aktor Sterujący (Driving/Primary Actor) to aktor, który steruje rdzeniem - wyprowadza go ze stanu spoczynku w celu wykonania jednej z jej udostępnionych funkcji.
+
+- Aktor Sterowany (Driven/Secondary Actor) to taki, którym kieruje rdzeń, aby uzyskać odpowiedzi lub po prostu go powiadomić.
+
+Takie rozróżnienie pozwala również podzielić adaptery:
+
+- **Adapter Sterujący** (Driving/Primary Adapter). Może być kontrolerem, który pobiera dane wejściowe (użytkownika) i przekazuje je do aplikacji za pośrednictwem portu. Adapter Sterujący będzie korzystać z Portu Sterującego, a serwis w rdzeniu zaimplementuje interfejs zdefiniowany przez port, w tym przypadku _zarówno interfejs portu, jak i implementacja znajdują się wewnątrz Heksagonu_.
+
+- **Adapter Sterowany** (Driven/Secondary Adapter). Na przykład Adapter bazy danych, który jest wywoływany przez rdzeń, aby pobrać określony zestaw danych z bazy danych. Adapter Sterowany zaimplementuje Port Sterowany, a serwis w rdzeniu będzie z niego korzystać, w tym przypadku _Port znajduje się wewnątrz Heksagonu, ale implementacja znajduje się w Adapterze, a więc poza Heksagonem_.
+
+![Porty i Adaptery](/static/blog/architektura-heksagonalna-porty-i-adaptery-w-laravelu/porty-i-adaptery.jpg)
+
+## Korzyści
+
+Architektura Heksagonalna nie jest idealnym rozwiązaniem dla wszystkich aplikacji. Doda ona dodatkowy poziom złożoności, ale sprawdzi się jeżeli potrzebujemy w systemie poniższych elementów.
+
+**Opóźnienie w czasie decyzji technicznych**
+Na początku projektu programista może nie wiedzieć jaka baza danych (lub inna technologia) sprawdzi się najlepiej. Można napisać tymczasowe adaptery, które będą zwracały dane wpisane na sztywno w pliku tekstowym. Rozwiązanie nie sprawdzi się na produkcji, ale umożliwi testy zanim nasza wiedza będzie na tyle duża, aby podjąć najlepszą decyzję.
+
+**Prosta zmiana technologii**
+Nawet jeżeli zdamy sobie sprawę, że wybór technologii był błędny to przełączanie się między technologiami to kwestia napisania nowych adapterów. Porty i Adaptery wpisują się w zasadę Open-Closed z SOLIDa sformułowanego przez Roberta Martina (Wujek Bob). Piszemy nowy kod i nie musimy modyfikować istniejącego.
+
+**Odwrócenie zależności**
+Realizujemy kolejną z zasad SOLID - Dependency Inversion, która mówi, że "Wysokopoziomowe moduły nie powinny zależeć od modułów niskopoziomowych - zależności między nimi powinny wynikać z abstrakcji.". DI skutecznie zmniejsza sprzężenie (coupling) między różnymi fragmentami kodu. **Mniejszy coupling = mniej uciążliwych zmian w miejscach połączeń**.
+- Po Stronie Sterującej adapter zależy od portu, którego implementacja jest w rdzeniu. Zna tylko metody zagwarantowane przez interfejs dlatego, zależy od abstrakcji.
+- Po Stronie Sterowanej serwis rdzenia zależy od portu, którego implementacja jest w infrastrukturze.
+
+**Lepsza testowalność**
+System może być testowany w oderwaniu od zewnętrznych zależności. Można podmienić prawdziwe adaptery na testowe.
+
+**Koncentracja na domenie**
+Rdzeń czyli clou naszej aplikacji jest wolny od wpływu technologii. Pozwala to skupić się na domenie, dlatego też Architektura Heksagonalna Często jest łączona z Domain Driven Design.
+
+## Domain Driven Laravel
+
+Poniżej zaimplementuje uproszczoną wersje systemu służącego do rezerwacji pokoju w hotelu z użyciem Hexagonal Architecture, Domain Driven Design oraz frameworka Laravel.
+
+Zacznijmy od wyznaczenia warstw naszego systemu. Warto przypomnieć, że Architektura Heksagonalna wspiera DDD przez izolowanie domeny od czynników zewnętrznych. Logika domeny jest zawarta w rdzeniu, który jest częścią wewnętrzną, a reszta to części zewnętrzne. Dostęp do logiki domeny z zewnątrz jest możliwy poprzez porty i adaptery.
+
+Podzielimy system na 3 warstwy: domena (wewnątrz heksagonu), aplikacja (zewnątrz) oraz infrastruktura (zewnątrz).
+
+- Poprzez warstwę aplikacji użytkownik wchodzi w interakcję z systemem. Obejmuje punkty wejścia do naszej aplikacji i koordynuje wykonywanie logiki domeny. Zawiera takie elementy jak kontrolery i interfejs użytkownika.
+
+- W warstwie domeny znajduje się kod odpowiedzialny za logikę biznesową. Zawiera interfejsy definiujące API do komunikacji z częściami zewnętrznymi, takimi jak baza danych. Jedyna warstwa we wnętrzu heksagonu.
+
+- Warstwa infrastruktury to część, która zawiera wszystko czego program potrzebuje do działania, na przykład konfigurację bazy danych i innych narzędzi. Zawiera implementacje interfejsów z warstwy domeny, które zależą od infrastruktury (repozytoria).
+
+Więcej informacji o tym dlaczego tak wyznaczam warstwy we wpisie [Architektura warstwowa w Laravelu](https://dev.to/kamilkozak/architektura-warstwowa-w-laravelu-52bg).
+
+### Warstwa domeny
+
+Model `Booking`:
+
+```php
+<?php
+
+namespace Src\Booking\Domain\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property int $id
+ * @property int $customer_id
+ * @property int $room_id
+ * @property string $check_in
+ * @property string $check_out
+ */
+class Booking extends Model
+{
+    //
+}
+```
+
+
+Port sterujący (interfejs w heksagonie):
+
+```php
+<?php
+
+namespace Src\Booking\Domain\Contracts;
+
+interface BookingService
+{
+    public function storeBooking(array $data);
+}
+```
+
+
+Implementacja Portu Sterującego w serwisie domeny (to nie jest adapter), używa Portu Sterowanego:
+
+```php
+<?php
+
+namespace Src\Booking\Domain\Services;
+
+use Illuminate\Support\Facades\DB;
+use Src\Booking\Domain\Contracts\BookingRepository;
+use Src\Booking\Domain\Contracts\BookingService as BookingServiceContract;
+use Src\Booking\Domain\Contracts\Events\BookingCreated;
+use Src\Booking\Domain\Models\Booking;
+use Src\Payment\Domain\Services\StripePaymentService;
+use Src\Room\Domain\Contracts\RoomService;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+
+
+class BookingService implements BookingServiceContract
+{
+    public function __construct(
+        private BookingRepository    $bookingRepository,
+        private RoomService          $roomService,
+        private StripePaymentService $paymentService,
+    ) {
+    }
+
+    public function storeBooking(array $data): Booking
+    {
+        DB::beginTransaction();
+
+        try {
+            $room = $this->roomService->getRoomById($data['room_id']);
+
+            $booking = $this->bookingRepository->createBooking($data);
+
+            $this->paymentService->charge($booking->getKey(), $room->price);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new UnprocessableEntityHttpException(__('booking::errors.failed'));
+        }
+
+        event(new BookingCreated($booking->getKey()));
+
+        return $booking;
+    }
+}
+
+```
+
+
+Port sterowany (interfejs repozytorium w heksagonie):
+
+```php
+<?php
+
+namespace Src\Booking\Domain\Contracts;
+
+use Src\Booking\Domain\Models\Booking;
+
+interface BookingRepository
+{
+    public function createBooking(array $data): Booking;
+}
+```
+
+
+### Warstwa aplikacji
+
+Adapter Sterujący - kontroler, który korzysta z Portu Sterującego:
+
+```php
+<?php
+
+namespace Src\Booking\Application\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Src\Booking\Application\Http\Requests\StoreBookingRequest;
+use Src\Booking\Application\Http\Resources\BookingResource;
+use Src\Booking\Domain\Contracts\BookingService;
+use Src\Booking\Domain\Models\Booking;
+
+class BookingController extends Controller
+{
+    public function store(StoreBookingRequest $request, BookingService $bookingService): BookingResource
+    {
+        $this->authorize('create', Booking::class);
+
+        $booking = $bookingService->storeBooking($request->validated());
+
+        return new BookingResource($booking);
+    }
+}
+
+```
+
+
+### Warstwa Infrastruktury
+
+Adapter sterowany - implementacja interfejsu repozytorium:
+
+```php
+<?php
+
+namespace Src\Booking\Infrastructure\Repositories;
+
+use Src\Booking\Domain\Contracts\BookingRepository as BookingRepositoryContract;
+use Src\Booking\Domain\Models\Booking;
+
+class BookingRepository implements BookingRepositoryContract
+{
+    public function createBooking(array $data): Booking
+    {
+        return Booking::create([
+            'customer_id' => $data['customer_id'],
+            'room_id' => $data['room_id'],
+            'check_in' => $data['check_in'],
+            'check_out' => $data['check_out'],
+        ]);
+    }
+}
+
+```
+
+**Service Container**
+Warto wspomnieć, że Laravel oferuje świetne narzędzie, które umożliwi połączenie interfejsu z daną implementacją, którym jest Service Container.
+
+Kod aplikacji dostępny jest w serwisie [github](https://github.com/kamilkozak/hexagonal-architecture-laravel)
+
+## Podsumowanie
+
+W przedstawionym przykładzie rdzeń wystawia porty do komunikacji z warstwą aplikacji (kontrolery) oraz bazą danych. Jednak w prawdziwej aplikacji potrzebujemy szeregu innych narzędzi lub zewnętrznych bibliotek jak obsługa cache'u, systemu plików, logowanie, wysyłanie maili, kolejki, sesje, autoryzacja. Laravel oferuje prosty dostęp do tych technologii za pomocą fasad, ale trzymając się ściśle omawianej architektury musielibyśmy z nich zrezygnować. Dla każdej z technologi należałoby zdefiniować interfejs i go zaimplementować w warstwie infrastruktury. Doprowadzony do skrajności, możesz potencjalnie przełączać frameworki bez ponownego kodowania aplikacji. Uważam jednak, że jest to najbardziej brzegowy i nierealistyczny przypadek do, którego nie warto dążyć. Programowanie w Laravelu ma być przyjemne, dlatego stosuj Porty i Adaptery tam gdzie widzisz z tego korzyści. Dla mnie osobiście Architektura Heksagonalna sprawdza się najlepiej jeżeli chcemy osiągnąć Modularny Monolit, ale to już będzie tematem kolejnego wpisu.
