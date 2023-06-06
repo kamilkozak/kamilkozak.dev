@@ -1,0 +1,214 @@
+---
+title: 'Architektura warstwowa w Laravelu'
+date: '2022-09-20'
+lastmod: '2023-01-29'
+tags: ['ddd', 'laravel', 'php', 'architecture']
+draft: false
+summary: 'Kiedy tworzymy aplikację, duża jej część nie jest bezpośrednio związana z domeną, ale jest częścią infrastruktury. Typowa aplikacja zawiera dużo kodu związanego z dostępem do bazy danych, dostępem do plików, UI (User Interface).'
+images: ['/static/blog/architektura-warstwowa-w-laravelu/laravel-warstwy.jpg']
+---
+
+Kiedy tworzymy aplikację, duża jej część nie jest bezpośrednio związana z domeną, ale jest częścią infrastruktury. Typowa aplikacja zawiera dużo kodu związanego z dostępem do bazy danych, dostępem do plików, UI (User Interface).
+
+Gdy kod związany z domeną jest mieszany z innymi warstwami (ponieważ jest to najłatwiejszy sposób, aby wszystko zaczęło działać szybko), staje się niezwykle trudny do czytania i zarządzania. Prowadzi to do niepożądanego sprzężenia (coupling) i może skutkować mniejszą elastycznością w większych aplikacjach. Nie ma izolacji między dwiema warstwami. Sprzęganie zawsze prowadzi do mniejszej elastyczności.
+
+W swojej książce Domain-Driven Design: Tackling Complexity in the Heart of Software, Eric Evans proponuje architekturę 4-warstwową, aby umożliwić izolację między warstwą domeny, która przechowuje logikę biznesową, a pozostałymi 3 warstwami pomocniczymi: interfejs użytkownika, aplikacja, i infrastruktura.
+
+Dlatego podziel złożony program na warstwy które będą zależne tylko od warstw poniżej. Skoncentruj cały kod związany z modelem domeny w jednej warstwie i izoluj go od aplikacji, infrastruktury i interfejsu użytkownika. Obiekty domeny, wolne od odpowiedzialności za wyświetlanie się, przechowywanie itd., mogą koncentrować się na wyrażaniu modelu domeny.
+
+![Architektura warstwowa](/static/blog/architektura-warstwowa-w-laravelu/architektura-warstwowa.jpg)
+
+- **Warstwa Interfejsu Użytkownika (Warstwa Prezentacji/UI)**
+Odpowiada za prezentowanie informacji i interpretację poleceń użytkownika. Przykładowo dla aplikacji webowych, UI obejmuje swoim zasięgiem przede wszystkim kontrolery. Może zostać połączona z Warstwą Aplikacji, gdyż najważniejsze jest wydzielenie domeny.
+
+- **Warstwa Aplikacji**
+Cienka warstwa która koordynuje działanie aplikacji. Definiuje zamierzone zadania programu i steruje obiektami dziedziny (z warstwy niżej) w celu rozwiązania postawionych przed nimi zadań. Nie zawiera logiki ani wiedzy biznesowej. Nie przechowuje stanu obiektów biznesowych, ale może przechowywać stan postępu zadania aplikacji.
+
+- **Warstwa Domeny**
+Ta warstwa zawiera informacje o domenie. Serce oprogramowania biznesowego. Przechowuje stan obiektów domeny, którego zapisywanie delegowane jest do warstwy infrastruktury.
+
+- **Warstwa Infrastruktury**
+Ta warstwa działa jako biblioteka pomocnicza dla pozostałych warstw. Zapewnia komunikację między warstwami. Implementuje utrwalanie obiektów biznesowych. Zawiera biblioteki pomocnicze dla warstwy Interfejsu Użytkownika itp. Zapewnia komunikację ze światem zewnętrznym.
+
+Na przykład tak może wyglądać typowa interakcja domeny, aplikacji i infrastruktury. Użytkownik chce zarezerwować pokój w hotelu i prosi o to serwis aplikacji w warstwie aplikacji. Warstwa aplikacji pobiera odpowiednie obiekty domeny (encje) z infrastruktury i wywołuje na nich metody do rezerwacji pokoju. Gdy obiekty domeny zakończą działania, usługa aplikacji utrwali obiekty w infrastrukturze.
+
+### Powiązanie warstw
+
+Warstwy mają być luźno powiązane, a zależności muszą być jednokierunkowe. Warstwy wyższe mogą używać elementów warstw niższych poprzez wykorzystanie ich interfejsów. Jeżeli na przykład aplikacja chce wysłać wiadomość e-mail, wtedy w warstwie infrastruktury może zostać zlokalizowany interfejs służący do wysyłania wiadomości, zaś elementy warstwy aplikacji mogłyby tylko zażądać jej wysłania. Dzięki temu warstwa aplikacji jest wąsko skoncentrowana na swoim zadaniu i wie, kiedy ma wysłać wiadomość, lecz nie przejmuje się tym, w jaki sposób to wykonać.
+
+## Domain Driver Laravel
+
+Tak wygląda próba dopasowania domyślnej struktury Laravela do warstw, które proponuje Evans.
+
+![Laravel warstwy](/static/blog/architektura-warstwowa-w-laravelu/laravel-warstwy.jpg)
+
+Jeżeli popatrzymy na Eloquent, możemy zobaczyć, że żyje on w warstwie infrastruktury (frameworka) jednak duża część naszej logiki domeny znajduje się w modelach, które Eloquenta rozszerzają. Między warstwą infrastruktury (frameworka) i warstwą domeny zachodzi silne powiązanie (coupling). W Laravelu wbrew zasadom DDD nie położono nacisku na rozdzielenie odpowiedzialności (separation of concerns), ale na czysty i prosty kod. Poszukajmy więc miejsca w którym Laravel i DDD współżyją razem.
+
+### Możliwa struktura folderów
+
+Dokumentacje i tutoriale do frameworków zachęcają do grupowania kodu opierając się na szczegółach technicznych czyli kontrolery z kontrolerami, modele z modelami i tak dalej. Przed wyznaczeniem struktury katalogów zgodnie z DDD warto odpowiedzieć sobie na pytanie czy klient prosi o "pracę nad kontrolerami" lub "katalogiem modeli" czy o pracę nad funkcjonalnością obsługi zamówień czy magazynu.
+
+Ponieważ chce zostać wiernym Laravelowi, w rzeczywistości nie zmienię wielu aspektów jego struktury bo nie jest to konieczne. Tutaj zasugeruję prostą strukturę folderów, aby konkretnie zaimplementować to, co omówiliśmy do tej pory.
+
+1) Zaczynamy od domyślnej struktury katalogów Laravela.
+
+2) Tworzymy folder Domain dla warstwy domeny - można to zrobić na 2 sposoby:
+
+a) Umieszczając go w `/app` (preferowane przeze mnie)
+```
+/app/Domain
+    |___ /Booking
+    |___ /Payment
+    |___ /Invoice
+        |___ /Actions
+        |___ /QueryBuilders
+        |___ /Collections
+        |___ /DataTransferObjects
+        |___ /Events
+        |___ /Exceptions
+        |___ /Jobs
+        |___ /Listeners
+        |___ /Models
+        |___ /Rules
+        |___ /States
+    |___ /Shared (funkcjonalności współdzielone)
+```
+
+b) Umieszczając go w `/src`. Trzeba go dodać w pliku composer.json, aby zarejestrować nową przestrzeń nazw.
+```json
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Domain\\" : "src/Domain/",
+            ...
+        }
+    },
+```
+Nie zapomnij `composer dump-autoload`.
+
+3) Tworzymy folder per Bounded Context/Domena  (Booking, Payment...) w poprzednio dodanym katalogu Domain.
+
+4) Warstawa aplikacji żyje tam gdzie dotychczas czyli w katalogu `/app/Http`.
+
+a) można pozostać przy domyślnej strukturze wewnątrz `/app/Http`
+```
+/app/Http
+    |___ /Controllers
+        |___ /Admin
+        |___ /Api
+        |___ /Front
+    |___ /Requests
+        |___ /Admin
+        |___ /Api
+        |___ /Front
+    |___ /Resources
+        |___ /Admin
+        |___ /Api
+        |___ /Front
+    |___ /ViewModels
+    |___ ...
+```
+b) ale preferuję odwrócenie tego schematu
+```
+/app/Http
+    |___ /Admin
+        |___ /Controllers
+        |___ /Requests
+        |___ /Resources
+        |___ /ViewModels
+    |___ /Api
+        |___ /Controllers
+        |___ /Requests
+        |___ /Resources
+    |___ /Front
+        |___ /Controllers
+        |___ /Requests
+        |___ /Resources
+        |___ /ViewModels
+    |___ /Support (funkcjonalności współdzielone)
+        |___ /Controllers
+        |___ /Middleware
+        |___ Kernel.php
+```
+c) a w przypadku dużej aplikacji
+```
+/app/Http
+    |___ /Admin
+        |___ /Booking
+            |___ /Controllers
+            |___ /Requests
+            |___ /Resources
+            |___ /ViewModels
+        |___ /Payment
+            |___ /Controllers
+            |___ /Requests
+            |___ /Resources
+            |___ /ViewModels
+        |___ /Invoice
+            |___ /Controllers
+            |___ /Requests
+            |___ /Resources
+            |___ /ViewModels
+    |___ /Api
+    |___ /Front
+    |___ /Support (funkcjonalności współdzielone)
+        |___ /Controllers
+        |___ /Middleware
+        |___ Kernel.php
+```
+
+5) Struktura w katalogu `/resources`, który też jest częścią warstwy aplikacji może naśladować tą z `/app/Http`
+
+### Domena
+
+Katalog domen związany jest z biznesem. W każdej z domen znajdują się foldery na koncepty z Laravela, które odpowiadają za logikę biznesową:
+
+- Models
+- Services
+- Actions
+- Events
+- Jobs
+- itd
+
+Poza separacją domeny taka struktura me też inne zalety:
+
+- Łatwiejsza nawigacja. Wszystko, co związane z zamówieniem, znajduje się w katalogu Order.
+
+- Łatwiejsze wdrażanie nowych programistów. W końcu pracujemy w zespołach z innymi programistami. O wiele łatwiej jest wdrożyć nowych deweloperów, jeśli mogę powiedzieć: „jeśli potrzebujesz czegoś związanego z fakturami, możesz przejść do katalogu Domains/Invoices”.
+
+Ta warstwa zawiera Serwisy Domeny (Domain Services). W przypadku gdy logika biznesowa nie pasuje do klasy modelu można umieścić ją w Serwisie Domeny.
+
+### Interfejs Użytkownika
+
+W tej warstwie mogą znajdować się kontrolery i widoki. Spełniają one jednak warunki, żeby należeć do warstwy aplikacji dlatego do niej je zakwalifikuje. Ma to większy sens ponieważ warstwa aplikacji w Laravelu jest bardzo cienka. Zwykle jest to miejsce na komendy (command) i command handlery oraz serwisy aplikacji, ale by zachować prostotę w Laravelu tego typu funkcjonalności umieszczam w warstwie domeny.
+
+### Aplikacja
+
+W tej warstwie mieszczą się Serwisy Aplikacji (Application Services). Warstwa ta może istnieć jako komponenty inne niż usługi - na przykład kontrolery. Stanowi "C" w architekturze MVC.
+
+Kontroler powinien ograniczyć się do wykonania dwóch rzeczy: przyjęcia żądania i zwrócenia odpowiedzi. Należy stosować podejście “Fat Model, Skinny Controller”. W idealnym przypadku akcja kontrolera powinna zawierać 1-2 linijki kodu. Logika związana z biznesem (domeną) powinna zostać przeniesiona w inne miejsce, w warstwie domeny.
+
+Często nie ma mapowania 1:1 między kontrolerami (aplikacja) i modelami (domena). Dlatego w podejściu, które stosuje aplikacja może korzystać z kilku domen jednocześnie.
+
+Umieść tutaj:
+
+- Controllers
+- Requests
+- Middleware
+- Resources
+- ViewModels
+
+### Infrastruktura
+
+W Warstwie Infrastruktury, która bywa też nazwana Warstwą Frameworka żyje Laravel, a także biblioteki/SDK zainstalowane composerem. Ten obszar obejmuje także konfigurację bazy danych i innych modułów Laravela z katalogu config, migracje, seedery, factory.
+
+## Podsumowanie
+
+Spojrzenie na architekturę, które przedstawiłem czerpie garściami z DDD i opiera się w głównej mierze na grupowaniu kodu wokół funkcjonalności. Sprawia, że zarządzanie projektem jest łatwiejsze gdy ten się rozrasta.
+
+W Projektowaniu Opartym na Domenie nie chodzi o idealne wyznaczenie warstwy prezentacji ani warstwy aplikacji. DDD to metodologia, której głównym celem jest warstwa domeny. Oznacza to, że DDD nie nakłada ograniczeń dotyczących żadnej warstwy poza warstwą Domeny. To, że ktoś utworzył katalogi „Warstwa aplikacji” i „Warstwa prezentacji”, nie oznacza, że ​​Twoja aplikacja powinna je mieć. Powinieneś tworzyć warstwy po utworzeniu znacznej ilości kodu, który pogrupowałeś i chcesz nazwać tę grupę ze względu na komunikację między programistami i przejrzystość kodu.
+
+Możesz się zastanawiać czy Laravel nie wymaga by klasy znajdywały się w domyślnych folderach. Odpowiedź brzmi: Nie. W rzeczywistości Laravel jest pod tym względem bardzo elastyczny. Jeżeli potrzebujesz zmienić istniejącą strukturę bardzo pomocny w tym jest PhpStorm. Można za jego pomocą przenosić w nowe miejsce klasy lub całe namespace'y i zadba on o zmianę ścieżek importu we wszystkich plikach.
+
+Nie poruszyłem ważnej kwestii separacji warstw, gdyż w tym podejściu jej nie stosuję. Wrócę do tego tematu we wpisie o Architekturze Heksagonalnej.
+
