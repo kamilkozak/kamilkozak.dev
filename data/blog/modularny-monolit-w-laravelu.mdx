@@ -1,0 +1,149 @@
+---
+title: 'Modularny monolit'
+date: '2022-10-26'
+lastmod: '2022-11-02'
+tags: ['ddd', 'laravel', 'modular monolith', 'architecture']
+draft: false
+summary: 'Choć monolit wcale nie wyklucza przejrzystej architektury nie trudno doprowadzić do stanu gdy kod przypomina wielką kule błota (big ball of mud). Nie brakuje przykładów kodu gdzie kontrolery są umieszczanie z kontrolerami, a modele z modelami. W dużej aplikacji doprowadzi to prędzej czy później do problemów z architekturą.'
+images: ['/static/blog/architektura-warstwowa-w-laravelu/laravel-warstwy.jpg']
+---
+
+Można spotkać się z opinią, że Architektura Monolityczna jest równoznaczna z trudnym do utrzymania, niechlujnym kodem. Choć monolit wcale nie wyklucza przejrzystej architektury nie trudno doprowadzić do stanu gdy kod przypomina wielką kule błota (big ball of mud). Winę za taki stan rzeczy ponoszą między innymi tutoriale i dokumentacje frameworków, które skupiają się na szczegółach technicznych z pominięciem architektury. Nie brakuje przykładów kodu gdzie kontrolery są umieszczanie z kontrolerami, a modele z modelami. W dużej aplikacji doprowadzi to prędzej czy później do problemów z architekturą.
+
+Śledząc konferencje programistyczne w ostatnich latach można zauważyć, że Mikroserwisy zyskały na popularności. Jest to spowodowane prawdopodobnie tym, że zaczęło ich używać wiele firm pokroju Netflixa. Firmy te mają specjalne wymagania, których Architektura Monolityczna nie jest w stanie spełnić. Mikroserwisy zaczęły być reklamowane jako Silver Bullet, który rozwiązuje wszystkie problemy rozwoju oprogramowania.
+
+Architektura Mikroserwisowa to właściwy wybór w wielu przypadkach użycia, ale jak każda inna Architektura Oprogramowania, ma również słabe punkty. Architektura Monolityczna również ma miejsce w nowoczesnym tworzeniu oprogramowania. Każda architektura oprogramowania ma swój własny zestaw zalet i wad, a inne rozwiązanie będzie miało sens dla aplikacji zależnie od fazy jej rozwoju.
+
+## Modularyzacja
+
+Wikipedia o [Aplikacji Monolitycznej](https://pl.wikipedia.org/wiki/Aplikacja_monolityczna):
+
+> Inżynieria oprogramowania opisuje aplikację monolityczną jako zaprojektowaną bez modułowości (podziału na moduły). Ogólnie rzecz biorąc, modułowość jest pożądana, ponieważ umożliwia ponowne wykorzystanie części logiki aplikacji, a także ułatwia konserwację, umożliwiając naprawę lub wymianę części aplikacji bez konieczności wymiany hurtowej.
+
+dalej
+
+> Modułowość jest osiągana w różnym stopniu przez różne podejścia do modularyzacji.
+
+Można spotkać się też z definicją:
+
+> Monolit to system, który ma dokładnie jedną jednostkę wdrożeniową.
+
+Zła reputacja Monolitów wynika z tego, że nie poddaje się ich odpowiedniej modularyzacji. Granice między różnymi domenami nie są przestrzegane co z czasem doprowadzi do wysokiego couplingu, który zastopuje rozwój i utrudni utrzymanie. Modularyzacja pozwoli uzyskać zalety zarówno monolitów, jak i mikroserwisów bez zwiększania liczby jednostek wdrożeniowych.
+
+Aby osiągnąć modularność, a co za tym idzie architekturę modułową ​​trzeba podzielić system na mniejsze kawałki czyli moduły, które są niezależne i wymienne, a każdy moduł musi mieć zdefiniowany interfejs i zaimplementować wszystko, co jest niezbędne do zapewnienia funkcjonalności biznesowej, którą opisuje interfejs.
+
+### Niezależność
+
+Moduł nigdy nie jest całkowicie niezależny, zawsze zależy od czegoś innego. Jednak zależności powinny być ograniczone do minimum zgodnie z zasadami: Low Coupling, High Cohesion. Aby określić, jak niezależny i wymienny jest moduł, musimy przyjrzeć się trzem czynnikom: liczbie zależności, sile tych zależności oraz stabilności modułów, od których zależy.
+
+### Funkcjonalność biznesowa
+
+W systemie typu "big ball of mud" spotkamy się z grupowaniem kodu na moduły techniczne - moduł dostępu do bazy danych, moduł systemu kolejek itd czyli plastry poziome (horizontal slices). Zmiana techniczna spowoduje zmianę w jednym module, ale zmiana biznesowa dotknie ich wszystkich. Jednak zmiany w systemie częściej dotyczą biznesu i z tego powodu moduły powinny być biznesowe - plastry pionowe (vertical slices). W ten sposób częste zmiany dotyczą tylko jednego modułu – staje się on bardziej samodzielny, autonomiczny i sam jest w stanie zapewnić funkcjonalność.
+
+### Interfejs
+
+Moduł powinien mieć dobrze zdefiniowany interfejs – kontrakt, który definiuje, co moduł może zrobić i ukrywa lub hermetyzuje, jak to się robi. Hermetyzacja jest nieodłącznym elementem modułowości. Interfejs służy do komunikacji z innymi modułami. Wszystko, co udostępniamy na zewnątrz, staje się publicznym API modułu. Jeżeli komunikujemy moduły przez zdarzenia to ono również jest kontraktem. Zmiana pola w klasie zdarzenia jest zmianą kontraktu.
+
+## Bounded Context
+
+Znakomitą techniką do wyznaczenia modułów jest Bounded Context (Kontekst Ograniczony) czyli centralny wzorzec z Domain Driven Design. W DDD domenę (dziedzinę) oprogramowania odzwierciedlamy w kodzie jako model domeny. Model ten umieszczamy w Kontekście Ograniczonym. Model, aby był skuteczny, musi być zunifikowany – to znaczy być wewnętrznie spójny, aby nie było w nim sprzeczności.
+
+Gdy próbujesz modelować większą domenę, coraz trudniej jest zbudować jeden zunifikowany model. "Klient" w aplikacji do rezerwacji pokoju hotelowego w zależności od kontekstu może oznaczać płatnika, rezerwującego, odbiorcę faktury, gościa pokoju. Tworzenie jednej tabeli i jednego zunifikowanego modelu na wszystkie te konteksty jest przykładem Big Ball of Mud. Zamiast 4 modeli i 4 kontekstów mamy 1 model do 4 kontekstów. Ponieważ każda z tych definicji „Klienta” jest jasna wyłącznie we własnym kontekście, to każda powinna zostać ujęta w osobnym Kontekście Ograniczonym. W każdym kontekście "Klient" będzie opisany innym Językiem Wszechobecnym (Ubiquitous Language). Język Wszechobecny to język wypracowany wokół modelu domeny i używany przez wszyskich członków zespołu.
+
+_Kontekst ograniczony nie jest modułem. Zapewnia ramę, w której model ewoluuje. Moduły służą do organizowania elementów modelu, więc Bounded Context obejmuje moduł._
+
+Aby osiągnąć modułowość w najprostszej formie można zacząć od przeniesienia klas z folderów technicznych do folderów nazwanych biznesowo. Wchodzimy w moduł Rezerwacji, a nie moduł kontrolerów czy serwisów. Pierwsze spotkanie z repozytorium kodu mówi nam jakie są funkcjonalności systemu. Kiedy mamy monolit typu spaghetti code to funkcji biznesowych nie widać. Jeżeli mamy wyznaczone moduły zmieniając funkcjonalność wchodzimy w jedno miejsce, zamiast przeszukiwać katalogi z kontrolerami, modelami itd. Rzeczy, które się zmieniają są blisko siebie. Osiągamy High Cohesion i Low Coupling na poziome nie klas, a modułów. Przeciwdziałamy antywzorcowi "Shotgun Surgery" wprowadzając zmiany w module, który tego wymaga, a nie w wielu miejscach jednocześnie w całym systemie.
+
+## Drivery Architektoniczne
+
+Lepsze są mikroserwisy czy monolit? Nie da się jednoznacznie odpowiedzieć na pytanie. Przed podjęciem decyzji należy kierować się kontekstem. W pewnych przypadkach nawet Big Ball Of Mud będzie dobrą architekturą gdy system ma powstać szybko i szybko zakończy żywot. Decyzję o wyborze właściwej architektury należy podjąć w oparciu o Drivery Architektoniczne (Architectural Drivers).
+
+**Drivery dla Monolitu:**
+
+- Architektura monolityczna jest łatwa do zbudowania i pozwala wcześniej zaprezentować produkt klientom.
+
+- Architektura monolityczna jest bardziej popularna. W związku z tym jest większa ilość dostępnych programistów, którzy są z nią zaznajomieni.
+
+- Jeden zestaw infrastruktury. W monolicie wystarczy jeden serwer z bazą danych. Dodatkowa infrastruktura zwiększa również liczbę możliwych punktów awarii, zmniejszając odporność i bezpieczeństwo aplikacji
+
+- Architektura monolitu jest mniej złożona niż system rozproszony. Wymaga mniej narzędzi, bibliotek, komponentów itd.
+
+- Wdrożenie monolitu jest łatwiejsze.
+
+- Monolit ma lepszą wydajność niż Mikroserwisy do momentu pojawienia się potrzeby skalowania.
+
+- Jedno repozytorium kodu. Możliwość łatwego wyszukiwania i znajdowania wszystkich funkcji w jednym folderze.
+
+- Wszystkie dane mogą znajdować się w jednej bazie danych. Łatwiejsze pobieranie danych z różnych tabel.
+
+- Możliwość bezpośredniego wywoływania innych komponentów, zamiast konieczności komunikowania się za pośrednictwem REST API. Nie trzeba się martwić o zarządzanie wersjami API i kompatybilność wsteczną.
+
+- Ze względu na mniejszą ilość komponentów niż w mikroserwisach (wiele serwerów, baz danych, połączeń sieciowych, kontenerów, maszyn wirtualnych) kompletna aplikacja jest łatwiejsza do zabezpieczenia .
+
+- Łatwiejsze transakcje bazodanowe.
+
+- Ze względu na brak połączeń zewnętrznych, całkowite opóźnienie całej aplikacji jest mniejsze.
+
+**Drivery dla Mikroserwisów:**
+
+- Wdrażanie autonomiczne. Mikroserwisy można wdrażać niezależnie.
+
+- Wydajniejsze wykorzystanie zasobów przy skalowaniu.
+
+- Mniejszy wpływ awarii jednego modułu na resztę systemu niż w Monolicie.
+
+- Każdy moduł może być napisany w innym języku programowania w zależności od potrzeb.
+
+- Mniejsza ilość wiedzy jaką musi przyswoić programista przed przystąpieniem do pracy. Rozmiar mikroserwisów jest niewielki. Mniej obciąża zdolności poznawcze, a programiści są bardziej produktywni.
+
+- Łatwiejszy podział prac między wieloma zespołami oraz zrównoleglenie prac.
+
+- Skalowanie granularne czyli skalowanie części aplikacji.
+
+- Możliwość użycia bazy danych lepiej dopasowanej do mikroserwisu.
+
+- Tak długo, jak zachowany jest zewnętrzny kontrakt, mikroserwis można szybko zastąpić, jak klocki Lego.
+
+## Integracja Modułów
+
+Aby dostarczyć system spełniający swoje zadanie potrzebne są sposoby, aby pocięte kawałki systemu mogły się ze sobą komunikować.
+
+### Synchroniczna komunikacja
+
+Bezpośrednie wywołanie (Direct Call). Wywołujemy moduł synchronicznie i musimy czekać na odpowiedź. Moduł ma zdefiniowane API czyli kontrakt (interfejs) lub strukturę danych, których możemy używać. Udostępnia tylko to, co jest potrzebne i w ten sposób stan naszego modułu nie jest nadmiernie eksponowany na zewnątrz. Stan systemu jest podzielony na stan modułów. Jeżeli to możliwe powinno się unikać zapisywania w jednej transakcji stanu wielu modułów.
+
+Odpowiednikiem w mikroserwisach jest API RESTowe, na które można stosunkowo łatwo przejść jeżeli Modularny Monolit jest etapem przejściowym w drodze do mikroserwisów.
+
+Coupling jest niższy niż w przypadku Współdzielonej Bazy Danych, ale nadal istnieje.
+
+### Asynchroniczna komunikacja
+
+Do komunikacji asynchronicznej służą Zdarzenia (Events). Ten styl integracji ma ogromna zaletę - tworzy minimalne zależności między modułami. Zdarzenia powinny być jak najmniejsze, ponieważ są częścią kontraktu, który udostępnia moduł. Rzucamy Event, a inne moduły się na niego subskrubują.
+
+Wady Zdarzeń:
+- Eventual Consistency. Ze względu na naturę asynchroniczności stan całego naszego systemu może być Ostatecznie Spójny i należy to brać pod uwagę definiując granice modułów.
+- Możliwa niewłaściwa kolejność Eventów.
+
+### Shared Database
+
+Współdzielona Baza Danych powoduje, że dane w modułach są zawsze spójne, ponieważ są to te same dane. Jeżeli moduł płatności zapisuje dane, moduł rezerwacji może je odczytać natychmiast po zakończeniu transakcji bazodanowej. Rozwiązanie jest mało skomplikowane i wygląda idealnie na pierwszy rzut oka, ale ma szereg problemów.
+
+Mamy wielkie tabele i trudno osiągnąć ujednolicony model danych, który zapewni spełnienie wymagań wszystkich modułów. Drugim problemem jest brak dobrze zdefiniowanego interfejsu ponieważ interfejsem jest tak naprawdę baza danych.
+
+Moduły łączy wspólny stan co oznacza wysokie sprzężenie oraz brak autonomii dla modułu. Nie ma nic łatwiejszego niż jednym zapytaniem pobrać dane do raportu z kilku tabel. Niemniej jednak każda zmiana w strukturze bazy danych może uszkodzić inny moduł.
+
+Z tych przyczyn lepiej wystrzegać się integracji modułów przez Shared Database.
+
+**Mapa Kontekstów**
+
+Podczas integracji modułów warto wiedzieć o kolejnym koncepcie z Domain Driven Design czyli Mapie Kontekstów. Mapa Kontekstów (Context Map) to dokument, który przedstawia Konteksty Ograniczone i relacje między nimi. Opisuje też relacje między zespołami, które nad nimi pracują.
+
+Jaki styl integracji wybrać? Gdy mówimy o architekturze modułowej, najlepiej mieszać różne style i używać razem Direct Call i Zdarzeń. W zależności od potrzeb jedne moduły mogą komunikować się synchronicznie, inne asynchronicznie.
+
+## Architektura Heksagonalna
+
+Jak konkretnie zaimplementować Architekturę Modularnego Monolitu? Nie trzeba wymyślać koła na nowo. W koncepcje omówione do tej pory idealnie wpisuje się Architektura Heksagonalna (lub podobne Onion i Clean Architecture).
+
+System typu Modularny Monolit musi posiadać samodzielne moduły, które zapewniają pełną funkcjonalność biznesową. Architektura Heksagonalna (Porty i Adaptery), doskonale wspiera takie projektowanie zorientowane na domenę. Co więcej, moduły muszą mieć dobrze zdefiniowane interfejsy. Cała komunikacja między modułami powinna odbywać się tylko przez te interfejsy. W Architekturze Heksagonalnej te interfejsy będą Portami. Jak widać ta architektura daje wszystko czego potrzebujemy, aby osiągnąć modułowość dlatego jest naturalnym wyborem.
+
+Moduł będzie zwykle podzielony na warstwy takie jak: Warstwa Aplikacji, Domeny, Infrastruktury. Pomaga to odseparować domenę od reszty kodu. Przy czym część modułów może stanowić tylko proste operacje typu CRUD (Create Read Update Delete). Dlatego stosowanie warstw nie powinno być decyzją globalną - każdy przypadek warto rozpatrzyć osobno.
