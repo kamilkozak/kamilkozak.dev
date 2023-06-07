@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import siteMetadata from '@/data/siteMetadata'
-import { Analytics } from 'pliny/analytics'
+import Analytics from '@/components/analytics'
 import { SearchProvider } from 'pliny/search'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
@@ -31,7 +31,7 @@ export default function App({ Component, pageProps, router }) {
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
-      <Analytics analyticsConfig={siteMetadata.analytics} />
+      <Analytics />
       <VercelAnalytics />
       <div className="fixed inset-0 flex justify-center sm:px-8">
         <div className="flex w-full max-w-7xl lg:px-8">
