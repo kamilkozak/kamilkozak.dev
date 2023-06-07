@@ -14,7 +14,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.jpg',
   image: '/static/images/avatar.jpg',
   socialBanner: '/static/images/twitter-card.jpg',
-  email: 'kozak.kamilw@gmail.com',
+  email: 'kozak.kamil.w@gmail.com',
   github: 'https://github.com/kamilkozak',
   twitter: 'https://twitter.com/kamil_kozak7',
   facebook: null,

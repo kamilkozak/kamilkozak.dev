@@ -20,7 +20,10 @@ const components = {
 }
 
 const SocialIcon = ({ className, children, kind, href, size = 8 }) => {
-  if (!href || (kind === 'mail' && !/^mailto:\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/.test(href)))
+  if (
+    !href ||
+    (kind === 'mail' && !/^mailto:\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(href))
+  )
     return null
 
   const SocialSvg = components[kind]

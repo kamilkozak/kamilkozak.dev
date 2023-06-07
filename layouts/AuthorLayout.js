@@ -77,7 +77,7 @@ export default function AuthorLayout({ content }) {
               size={5}
               className="mt-8 border-t border-gray-100 pt-8 dark:border-gray-700/40"
             >
-              kozak.kamil.w@gmail.com
+              {email}
             </SocialIcon>
           </div>
         </div>
