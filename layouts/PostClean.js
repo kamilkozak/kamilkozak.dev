@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import { BlogNewsletterForm } from '@/components/NewsletterForm'
 import { Button } from '@/components/Button'
 
-const editUrl = (path) => `${siteMetadata.siteRepo}/blob/master/data/${path}`
+const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 
 function ArrowLeftIcon(props) {
   return (
