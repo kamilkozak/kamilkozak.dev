@@ -11,6 +11,7 @@ import siteMetadata from '@/data/siteMetadata'
 import { Analytics } from 'pliny/analytics'
 import { SearchProvider } from 'pliny/search'
 import LayoutWrapper from '@/components/LayoutWrapper'
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 
 function usePrevious(value) {
   let ref = useRef()
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps, router }) {
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <Analytics analyticsConfig={siteMetadata.analytics} />
+      <VercelAnalytics />
       <div className="fixed inset-0 flex justify-center sm:px-8">
         <div className="flex w-full max-w-7xl lg:px-8">
           <div className="w-full bg-white ring-1 ring-gray-100 dark:bg-gray-900 dark:ring-gray-300/20" />
