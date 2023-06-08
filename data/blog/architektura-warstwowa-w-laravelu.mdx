@@ -8,6 +8,10 @@ summary: 'Kiedy tworzymy aplikację, duża jej część nie jest bezpośrednio z
 images: ['/static/blog/architektura-warstwowa-w-laravelu/laravel-warstwy.jpg']
 ---
 
+<TOCInline toc={props.toc} />
+
+## Warstwy
+
 Kiedy tworzymy aplikację, duża jej część nie jest bezpośrednio związana z domeną, ale jest częścią infrastruktury. Typowa aplikacja zawiera dużo kodu związanego z dostępem do bazy danych, dostępem do plików, UI (User Interface).
 
 Gdy kod związany z domeną jest mieszany z innymi warstwami (ponieważ jest to najłatwiejszy sposób, aby wszystko zaczęło działać szybko), staje się niezwykle trudny do czytania i zarządzania. Prowadzi to do niepożądanego sprzężenia (coupling) i może skutkować mniejszą elastycznością w większych aplikacjach. Nie ma izolacji między dwiema warstwami. Sprzęganie zawsze prowadzi do mniejszej elastyczności.

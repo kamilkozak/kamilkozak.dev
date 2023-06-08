@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React from 'react'
-import { TOCInline } from 'pliny/ui/TOCInline'
+import TOCInline from '@/components/TOCInline'
 import { Pre } from 'pliny/ui/Pre'
 import { BlogNewsletterForm } from '@/components/NewsletterForm'
 import Image from './Image'
