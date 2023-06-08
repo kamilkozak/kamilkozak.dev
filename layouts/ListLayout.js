@@ -4,7 +4,7 @@ import { formatDate } from 'pliny/utils/formatDate'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import SectionContainer from '@/components/SectionContainer'
+import { Container } from '@/components/Container'
 function Pagination({ totalPages, currentPage }) {
   const router = useRouter()
   const basePath = router.pathname.split('/')[1]
@@ -54,7 +54,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
   const displayPosts =
     initialDisplayPosts.length > 0 && !searchValue ? initialDisplayPosts : filteredBlogPosts
   return (
-    <SectionContainer className="mt-4 sm:mt-8">
+    <Container className="mt-4 sm:mt-8">
       <div className="max-w-2xl">
         <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
           {title}
@@ -140,6 +140,6 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
       {pagination && pagination.totalPages > 1 && !searchValue && (
         <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
       )}
-    </SectionContainer>
+    </Container>
   )
 }

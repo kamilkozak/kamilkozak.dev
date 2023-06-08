@@ -17,8 +17,8 @@ import logoMasterlease from 'public/static/images/logos/masterlease.png'
 import logoHomfi from 'public/static/images/logos/homfi.png'
 import logoWebchefs from 'public/static/images/logos/webchefs.png'
 import logoPlaceholder from 'public/static/images/logos/placeholder.png'
-import SectionContainer from '@/components/SectionContainer'
 import { Button } from '@/components/Button'
+import { Container } from '@/components/Container'
 
 const MAX_DISPLAY = 3
 export const getStaticProps = async () => {
@@ -192,7 +192,7 @@ export default function Home({ posts }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
-      <SectionContainer>
+      <Container>
         <div className="max-w-2xl">
           <div className="space-y-3 md:space-y-6">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
@@ -209,11 +209,11 @@ export default function Home({ posts }) {
             </div>
           </div>
         </div>
-      </SectionContainer>
+      </Container>
 
       <Photos />
 
-      <SectionContainer className="mt-24 md:mt-28">
+      <Container className="mt-24 md:mt-28">
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
           <div className="flex flex-col gap-16">
             {!posts.length && 'Nie znaleziono postów.'}
@@ -273,7 +273,7 @@ export default function Home({ posts }) {
             <Resume />
           </div>
         </div>
-      </SectionContainer>
+      </Container>
     </>
   )
 }

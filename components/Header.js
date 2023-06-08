@@ -5,7 +5,7 @@ import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import Image from '@/components/Image'
 import logo from '@/data/logo.jpg'
-import SectionContainer from '@/components/SectionContainer'
+import { Container } from '@/components/Container'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
 
@@ -49,31 +49,33 @@ function DesktopNav(props) {
 const Header = () => {
   return (
     <header className="py-10">
-      <SectionContainer className="flex items-center justify-between">
-        <div>
-          <Link href="/" aria-label={siteMetadata.headerTitle}>
-            <div className="flex items-center justify-between">
-              <div className="mr-3">
-                <Image
-                  src={logo}
-                  width={64}
-                  height={64}
-                  alt="avatar"
-                  className="h-16 w-16 rounded-full"
-                />
+      <Container>
+        <div className="flex items-center justify-between">
+          <div>
+            <Link href="/" aria-label={siteMetadata.headerTitle}>
+              <div className="flex items-center justify-between">
+                <div className="mr-3">
+                  <Image
+                    src={logo}
+                    width={64}
+                    height={64}
+                    alt="avatar"
+                    className="h-16 w-16 rounded-full"
+                  />
+                </div>
+                {typeof siteMetadata.headerTitle === 'string' ? (
+                  <div className="hidden h-6 text-2xl font-semibold sm:block">{null}</div>
+                ) : null}
               </div>
-              {typeof siteMetadata.headerTitle === 'string' ? (
-                <div className="hidden h-6 text-2xl font-semibold sm:block">{null}</div>
-              ) : null}
-            </div>
-          </Link>
+            </Link>
+          </div>
+          <div className="flex items-center text-base leading-5">
+            <DesktopNav className="hidden sm:block" />
+            <ThemeSwitch />
+            <MobileNav />
+          </div>
         </div>
-        <div className="flex items-center text-base leading-5">
-          <DesktopNav className="hidden sm:block" />
-          <ThemeSwitch />
-          <MobileNav />
-        </div>
-      </SectionContainer>
+      </Container>
     </header>
   )
 }

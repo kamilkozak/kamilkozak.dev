@@ -1,12 +1,12 @@
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
 import { PageSEO } from '@/components/SEO'
-import SectionContainer from '@/components/SectionContainer'
 import Link from 'next/link'
+import { Container } from '@/components/Container'
 export default function AuthorLayout({ content }) {
   const { name, avatar, email, twitter, linkedin, github, instagram } = content
   return (
-    <SectionContainer className="mt-4 sm:mt-8">
+    <Container className="mt-4 sm:mt-8">
       <PageSEO
         title={`O mnie - ${name}`}
         description="Nazywam się Kamil Kozak. Rozwiązuje problemy biznesowe za pomocą Laravela."
@@ -82,6 +82,6 @@ export default function AuthorLayout({ content }) {
           </div>
         </div>
       </div>
-    </SectionContainer>
+    </Container>
   )
 }
