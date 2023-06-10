@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 /**
  * @typedef TocHeading
  * @prop {string} value
@@ -37,11 +39,17 @@ const TOCInline = ({
       heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
   )
 
+  const indentStyle = (headingDepth) => {
+    return headingDepth >= indentDepth ? (headingDepth - indentDepth + 1) * 1.5 : 0
+  }
+
   const tocList = (
     <ul>
       {filteredToc.map((heading) => (
-        <li key={heading.value} className={`${heading.depth >= indentDepth && 'ml-6'}`}>
-          <a href={heading.url}>{heading.value}</a>
+        <li key={heading.value} style={{ marginLeft: indentStyle(heading.depth) + 'rem' }}>
+          <Link passHref href={heading.url} replace>
+            {heading.value}
+          </Link>
         </li>
       ))}
     </ul>

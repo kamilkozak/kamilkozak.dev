@@ -56,10 +56,10 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
   return (
     <Container className="mt-4 sm:mt-8">
       <div className="max-w-2xl">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-800 dark:text-gray-100 sm:text-5xl">
           {title}
         </h1>
-        <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+        <p className="mt-6 text-base text-gray-600 dark:text-gray-400">
           Moje przemyślenia na temat programowania, architektury, PHP i Laravela.
         </p>
         <div className="relative mt-6">
@@ -90,7 +90,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
         </div>
       </div>
       <div className="mt-16 sm:mt-20">
-        <div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
+        <div className="md:border-l md:border-gray-100 md:pl-6 md:dark:border-gray-700/40">
           <div className="flex flex-col space-y-16">
             {!filteredBlogPosts.length && 'Nie znaleziono postów.'}
             {displayPosts.map((post) => {
@@ -98,35 +98,35 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
               return (
                 <article key={path} className="md:grid md:grid-cols-4 md:items-baseline">
                   <div className="group relative flex flex-col items-start md:col-span-3">
-                    <h2 className="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
-                      <div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
+                    <h2 className="text-2xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
+                      <div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-gray-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 dark:bg-gray-800/50 sm:-inset-x-6 sm:rounded-2xl"></div>
                       <Link href={`/${path}`}>
                         <span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
                         <span className="relative z-10">{title}</span>
                       </Link>
                     </h2>
                     <time
-                      className="relative z-10 order-first mb-3 flex items-center pl-3.5 text-zinc-400 dark:text-zinc-500 md:hidden"
+                      className="relative z-10 order-first mb-3 flex items-center pl-3.5 text-gray-400 dark:text-gray-500 md:hidden"
                       dateTime={date}
                     >
                       <span
                         className="absolute inset-y-0 left-0 flex items-center"
                         aria-hidden="true"
                       >
-                        <span className="h-4 w-0.5 rounded-full bg-zinc-200 dark:bg-zinc-500"></span>
+                        <span className="h-4 w-0.5 rounded-full bg-gray-200 dark:bg-gray-500"></span>
                       </span>
                       {formatDate(date, siteMetadata.locale)}
                     </time>
-                    <p className="relative z-10 mt-2 text-zinc-600 dark:text-zinc-400">{summary}</p>
+                    <p className="relative z-10 mt-2 text-gray-600 dark:text-gray-400">{summary}</p>
                     <div
                       aria-hidden="true"
-                      className="relative z-10 mt-4 flex items-center font-medium text-teal-500"
+                      className="relative z-10 mt-4 flex items-center font-medium text-primary-500"
                     >
                       Czytaj dalej &rarr;
                     </div>
                   </div>
                   <time
-                    className="relative z-10 order-first mb-3 mt-1 flex hidden items-center text-zinc-400 dark:text-zinc-500 md:block"
+                    className="relative z-10 order-first mb-3 mt-1 flex hidden items-center text-gray-400 dark:text-gray-500 md:block"
                     dateTime={date}
                   >
                     {formatDate(date, siteMetadata.locale)}
